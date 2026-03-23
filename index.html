@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PromoHub — Melhores Ofertas do Brasil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ===================== RESET & BASE ===================== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:#0a0a0f; --bg2:#111118; --card:#16161f; --border:#1e1e2e;
+  --bg3:#141420; --card2:#1c1c28; --border2:#252535;
+  --wa:#25d366; --wa2:#128c4e;
+  --ig1:#f58529; --ig2:#dd2a7b; --ig3:#8134af;
+  --muted2:#4a4a6a;
+  --accent:#ff4d00; --accent2:#ff9500; --accent3:#00d4ff;
+  --text:#f0f0f8; --muted:#8888aa; --green:#00e676;
+}
+
+body {
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg); color:var(--text);
+  min-height:100vh; overflow-x:hidden;
+}
+
+/* noise */
+body::before {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:.25;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* ===================== PAGE SYSTEM ===================== */
+.page { display:none; min-height:100vh; }
+.page.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.page.active { animation:fadeIn .35s ease both; }
+
+/* ===================== HEADER ===================== */
+.site-header {
+  position:sticky; top:0; z-index:200;
+  background:rgba(10,10,15,.92); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border); padding:0 2rem;
+}
+.header-inner {
+  max-width:1300px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  height:64px; gap:1.5rem;
+}
+.logo {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem;
+  letter-spacing:-.5px; display:flex; align-items:center; gap:.4rem;
+  white-space:nowrap; cursor:pointer; text-decoration:none; color:var(--text);
+}
+.logo span { color:var(--accent); }
+.logo-dot { width:8px; height:8px; background:var(--accent); border-radius:50%; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
+
+.header-nav { display:flex; gap:.2rem; flex-wrap:wrap; }
+.header-nav a {
+  color:var(--muted); text-decoration:none; font-size:.8rem; font-weight:500;
+  padding:.32rem .72rem; border-radius:6px; transition:.2s; white-space:nowrap; cursor:pointer;
+}
+.header-nav a:hover { color:var(--text); background:var(--card); }
+.header-nav a.active { color:var(--accent); background:rgba(255,77,0,.1); }
+.header-badge {
+  background:var(--accent); color:#fff; font-size:.7rem; font-weight:700;
+  padding:.28rem .8rem; border-radius:20px; letter-spacing:.5px;
+  text-transform:uppercase; white-space:nowrap; flex-shrink:0;
+}
+
+/* ===================== TICKER ===================== */
+.ticker-wrap {
+  background:var(--accent); padding:.55rem 0;
+  overflow:hidden; white-space:nowrap;
+}
+.ticker-inner { display:inline-block; animation:ticker 32s linear infinite; }
+.ticker-inner span { font-size:.76rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:0 2.5rem; color:#fff; }
+.ticker-inner span::before { content:'⚡'; margin-right:.5rem; }
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ===================== HOME HERO ===================== */
+.hero {
+  position:relative; overflow:hidden;
+  padding:5rem 2rem 4rem; text-align:center;
+}
+.hero-bg {
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%,rgba(255,77,0,.18),transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%,rgba(0,212,255,.07),transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 80%,rgba(255,149,0,.07),transparent 60%);
+}
+.hero-tag {
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:rgba(255,77,0,.1); border:1px solid rgba(255,77,0,.3);
+  color:var(--accent2); font-size:.76rem; font-weight:600;
+  padding:.38rem 1rem; border-radius:20px; margin-bottom:1.5rem;
+  letter-spacing:.5px; text-transform:uppercase;
+  animation:fadeUp .5s ease both;
+}
+.hero h1 {
+  font-family:'Syne',sans-serif; font-size:clamp(2.5rem,7vw,5.5rem);
+  font-weight:800; line-height:1.05; letter-spacing:-2px; margin-bottom:1.2rem;
+  animation:fadeUp .5s .1s ease both;
+}
+.hero h1 em {
+  font-style:normal;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.hero p {
+  color:var(--muted); font-size:1.1rem; max-width:560px;
+  margin:0 auto 2rem; line-height:1.7; font-weight:300;
+  animation:fadeUp .5s .2s ease both;
+}
+.hero-stats {
+  display:flex; justify-content:center; gap:3rem; margin-top:3rem; flex-wrap:wrap;
+  animation:fadeUp .5s .3s ease both;
+}
+.stat { text-align:center; }
+.stat-num { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:var(--accent); line-height:1; }
+.stat-label { font-size:.74rem; color:var(--muted); margin-top:.3rem; text-transform:uppercase; letter-spacing:.5px; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+/* ===================== STORES PILLS ===================== */
+.stores-section { padding:3rem 2rem 2rem; max-width:1300px; margin:0 auto; }
+.section-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:1.2rem; }
+.stores-grid { display:flex; gap:.75rem; flex-wrap:wrap; }
+.store-pill {
+  display:flex; align-items:center; gap:.6rem;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:.55rem 1.2rem; cursor:pointer;
+  transition:.25s; text-decoration:none; color:var(--text);
+}
+.store-pill:hover,.store-pill.active { border-color:var(--accent); background:rgba(255,77,0,.08); transform:translateY(-1px); }
+.store-icon { width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1rem; }
+.store-name { font-size:.84rem; font-weight:600; }
+
+/* ===================== NICHE CHIPS ===================== */
+.niches-section { padding:2rem; max-width:1300px; margin:0 auto; }
+.niches-scroll { display:flex; gap:.6rem; overflow-x:auto; padding-bottom:.5rem; scrollbar-width:none; }
+.niches-scroll::-webkit-scrollbar { display:none; }
+.niche-chip {
+  display:flex; align-items:center; gap:.4rem;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:50px; padding:.44rem 1rem; font-size:.8rem;
+  font-weight:500; white-space:nowrap; cursor:pointer; transition:.2s; color:var(--text);
+}
+.niche-chip:hover { border-color:var(--accent3); color:var(--accent3); }
+.niche-chip.active { background:rgba(0,212,255,.1); border-color:var(--accent3); color:var(--accent3); }
+
+/* ===================== HOME PRODUCTS SECTION ===================== */
+.home-products { padding:1rem 2rem 3rem; max-width:1300px; margin:0 auto; }
+.section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem; }
+.section-title { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:700; }
+.see-all { font-size:.82rem; color:var(--accent); text-decoration:none; font-weight:600; }
+
+/* ===================== HOME CARDS (file 1 style) ===================== */
+.card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:1rem; }
+
+.hcard {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; overflow:hidden; transition:.3s;
+  cursor:pointer; position:relative; display:flex; flex-direction:column;
+}
+.hcard:hover { border-color:rgba(255,77,0,.45); transform:translateY(-3px); box-shadow:0 20px 40px rgba(0,0,0,.4); }
+.hcard-badges { position:absolute; top:12px; left:12px; z-index:2; display:flex; gap:.3rem; }
+.hbadge { font-size:.68rem; font-weight:700; padding:.22rem .52rem; border-radius:5px; text-transform:uppercase; letter-spacing:.4px; }
+.hb-hot { background:var(--accent); color:#fff; }
+.hb-new { background:var(--green); color:#000; }
+.hb-sale { background:var(--accent2); color:#000; }
+.hb-best { background:var(--accent3); color:#000; }
+.hcard-store {
+  position:absolute; top:12px; right:12px; z-index:2;
+  font-size:.64rem; font-weight:700; padding:.2rem .46rem;
+  border-radius:5px; backdrop-filter:blur(8px);
+}
+.hcard-img { width:100%; aspect-ratio:1; background:var(--bg2); display:flex; align-items:center; justify-content:center; font-size:3.8rem; }
+.hcard-body { padding:1rem; flex:1; display:flex; flex-direction:column; }
+.hcard-cat { font-size:.67rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:.35rem; font-weight:600; }
+.hcard-title { font-size:.88rem; font-weight:500; line-height:1.4; margin-bottom:.8rem; color:var(--text); flex:1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.hcard-pricing { display:flex; align-items:flex-end; gap:.45rem; margin-bottom:.8rem; flex-wrap:wrap; }
+.hprice-now { font-family:'Syne',sans-serif; font-size:1.25rem; font-weight:800; color:var(--green); line-height:1; }
+.hprice-old { font-size:.78rem; color:var(--muted); text-decoration:line-through; }
+.hprice-off { font-size:.67rem; font-weight:700; background:rgba(0,230,118,.15); color:var(--green); padding:.12rem .36rem; border-radius:4px; }
+.hcard-btn {
+  display:block; width:100%; background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff; text-align:center; padding:.62rem; border-radius:10px;
+  font-size:.8rem; font-weight:700; text-decoration:none; transition:.2s; border:none; cursor:pointer;
+}
+.hcard-btn:hover { filter:brightness(1.12); transform:translateY(-1px); }
+
+/* store tag colors */
+.hs-amazon { background:rgba(255,153,0,.18); color:#FF9900; }
+.hs-shopee { background:rgba(238,77,45,.18); color:#EE4D2D; }
+.hs-ml { background:rgba(0,160,0,.18); color:#8cc800; }
+.hs-magalu { background:rgba(0,122,204,.18); color:#60b8ff; }
+.hs-temu { background:rgba(88,101,242,.18); color:#8b9dff; }
+.hs-ali { background:rgba(228,50,37,.18); color:#ff7a73; }
+
+/* ===================== BANNER ===================== */
+.banner-wrap { padding:0 2rem 3rem; max-width:1300px; margin:0 auto; }
+.banner {
+  background:linear-gradient(135deg,#1a0a00,#0d0d1a);
+  border:1px solid var(--border); border-radius:20px;
+  padding:2.5rem; display:flex; align-items:center;
+  justify-content:space-between; gap:2rem; overflow:hidden; position:relative;
+}
+.banner::before {
+  content:''; position:absolute; right:-80px; top:-80px;
+  width:300px; height:300px; border-radius:50%;
+  background:radial-gradient(circle,rgba(255,77,0,.2),transparent 70%); pointer-events:none;
+}
+.banner-text h2 { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; margin-bottom:.5rem; letter-spacing:-.5px; }
+.banner-text p { color:var(--muted); font-size:.88rem; max-width:380px; }
+.banner-cta { display:flex; flex-direction:column; gap:.75rem; flex-shrink:0; }
+.btn-primary { background:var(--accent); color:#fff; border:none; padding:.78rem 2rem; border-radius:12px; font-size:.88rem; font-weight:700; cursor:pointer; transition:.2s; white-space:nowrap; }
+.btn-primary:hover { filter:brightness(1.1); transform:translateY(-1px); }
+.btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); padding:.78rem 2rem; border-radius:12px; font-size:.84rem; font-weight:500; cursor:pointer; transition:.2s; white-space:nowrap; }
+.btn-ghost:hover { color:var(--text); border-color:var(--text); }
+
+/* ===================== CATEGORIES GRID (home) ===================== */
+.cat-section { padding:1rem 2rem 4rem; max-width:1300px; margin:0 auto; }
+.cat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); gap:.8rem; }
+.cat-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:1.25rem 1rem 1.1rem; text-align:center;
+  cursor:pointer; transition:.25s; text-decoration:none; display:block;
+}
+.cat-card:hover { border-color:var(--accent3); transform:translateY(-2px); background:rgba(0,212,255,.05); }
+.cat-icon { font-size:2rem; margin-bottom:.5rem; }
+.cat-name { font-size:.82rem; font-weight:600; color:var(--text); }
+.cat-count { font-size:.68rem; color:var(--muted); margin-top:.2rem; }
+
+/* ===================== SHARED NICHE PAGE ===================== */
+.niche-breadcrumb {
+  padding:.75rem 2rem; max-width:1300px; margin:0 auto;
+  display:flex; align-items:center; gap:.5rem; font-size:.76rem; color:var(--muted);
+}
+.niche-breadcrumb a { color:var(--muted); text-decoration:none; cursor:pointer; }
+.niche-breadcrumb a:hover { color:var(--text); }
+
+.niche-hero { padding:3.5rem 2rem 3rem; position:relative; overflow:hidden; max-width:1300px; margin:0 auto; }
+.niche-hero-bg { position:absolute; inset:0; pointer-events:none; border-radius:24px; }
+.niche-hero-content { position:relative; z-index:1; }
+.niche-tag {
+  display:inline-flex; align-items:center; gap:.5rem; border:1px solid;
+  border-radius:20px; font-size:.7rem; font-weight:700; padding:.33rem .9rem;
+  margin-bottom:1rem; text-transform:uppercase; letter-spacing:.5px;
+}
+.niche-hero h1 { font-family:'Syne',sans-serif; font-size:clamp(1.9rem,5vw,3.8rem); font-weight:800; letter-spacing:-1.5px; line-height:1.05; margin-bottom:.75rem; }
+.niche-hero p { color:var(--muted); font-size:1rem; max-width:520px; line-height:1.7; }
+.niche-meta { display:flex; gap:2rem; margin-top:2rem; flex-wrap:wrap; }
+.niche-meta-num { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; line-height:1; }
+.niche-meta-label { font-size:.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-top:.2rem; }
+
+/* filters */
+.filters-bar { max-width:1300px; margin:0 auto; padding:1rem 2rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+.filter-group { display:flex; gap:.4rem; flex-wrap:wrap; }
+.filter-label { font-size:.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; white-space:nowrap; }
+.filter-btn {
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  padding:.38rem .88rem; font-size:.76rem; font-weight:500; cursor:pointer;
+  transition:.2s; color:var(--text); white-space:nowrap;
+}
+.filter-btn:hover,.filter-btn.active { border-color:var(--niche-accent,var(--accent)); color:var(--niche-accent,var(--accent)); background:rgba(255,77,0,.08); }
+.sort-select { background:var(--card); border:1px solid var(--border); color:var(--text); padding:.38rem .8rem; border-radius:8px; font-size:.76rem; cursor:pointer; margin-left:auto; }
+
+/* niche products */
+.products-wrap { max-width:1300px; margin:0 auto; padding:1rem 2rem 5rem; }
+.products-heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; flex-wrap:wrap; gap:.5rem; }
+.products-heading h2 { font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; }
+.products-count { font-size:.78rem; color:var(--muted); }
+.ngrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
+
+/* niche card */
+.ncard {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; overflow:hidden; transition:.3s;
+  cursor:pointer; position:relative; display:flex; flex-direction:column;
+  animation:cardIn .4s ease both;
+}
+@keyframes cardIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+.ncard:hover { border-color:var(--niche-accent,var(--accent)); transform:translateY(-4px); box-shadow:0 20px 40px rgba(0,0,0,.5); }
+.ncard-badges { position:absolute; top:10px; left:10px; z-index:2; display:flex; gap:.3rem; flex-wrap:wrap; }
+.nbadge { font-size:.65rem; font-weight:700; padding:.22rem .5rem; border-radius:5px; text-transform:uppercase; letter-spacing:.4px; }
+.nb-hot{background:var(--accent);color:#fff} .nb-new{background:var(--green);color:#000}
+.nb-sale{background:var(--accent2);color:#000} .nb-best{background:var(--accent3);color:#000}
+.ncard-store { position:absolute; top:10px; right:10px; z-index:2; font-size:.62rem; font-weight:700; padding:.2rem .45rem; border-radius:5px; backdrop-filter:blur(8px); }
+.ncard-img { width:100%; aspect-ratio:1; background:var(--bg2); display:flex; align-items:center; justify-content:center; font-size:3.5rem; }
+.ncard-body { padding:.9rem; flex:1; display:flex; flex-direction:column; }
+.ncard-cat { font-size:.65rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:.3rem; font-weight:600; }
+.ncard-title { font-size:.85rem; font-weight:500; line-height:1.4; margin-bottom:.75rem; color:var(--text); flex:1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.ncard-pricing { display:flex; align-items:flex-end; gap:.4rem; margin-bottom:.75rem; flex-wrap:wrap; }
+.nprice-now { font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:800; color:var(--green); line-height:1; }
+.nprice-old { font-size:.74rem; color:var(--muted); text-decoration:line-through; }
+.nprice-off { font-size:.65rem; font-weight:700; background:rgba(0,230,118,.15); color:var(--green); padding:.12rem .35rem; border-radius:4px; }
+.ncard-btn {
+  display:block; width:100%; padding:.6rem; border-radius:9px; font-size:.78rem; font-weight:700;
+  text-align:center; text-decoration:none; border:none; cursor:pointer; transition:.2s;
+  background:linear-gradient(135deg,var(--niche-accent,var(--accent)),var(--niche-accent2,var(--accent2)));
+  color:var(--niche-btn-text,#fff);
+}
+.ncard-btn:hover { filter:brightness(1.15); transform:translateY(-1px); }
+
+/* store tag colors */
+.ns-amazon{background:rgba(255,153,0,.15);color:#FF9900}
+.ns-shopee{background:rgba(238,77,45,.15);color:#EE4D2D}
+.ns-ml{background:rgba(0,160,0,.15);color:#8cc800}
+.ns-magalu{background:rgba(0,122,204,.15);color:#60b8ff}
+.ns-temu{background:rgba(88,101,242,.15);color:#8b9dff}
+.ns-ali{background:rgba(228,50,37,.15);color:#ff7a73}
+
+/* featured card */
+.featured-row { max-width:1300px; margin:0 auto 2rem; padding:0 2rem; }
+.featured-card {
+  background:var(--card); border:1px solid var(--border); border-radius:20px;
+  padding:2rem; display:flex; gap:2rem; align-items:center; transition:.3s; cursor:pointer; position:relative; overflow:hidden;
+}
+.featured-card:hover { border-color:var(--niche-accent,var(--accent)); transform:translateY(-2px); }
+.featured-card .big-icon { font-size:5rem; flex-shrink:0; }
+.featured-info { flex:1; }
+.featured-info .tag { font-size:.68rem; color:var(--niche-accent,var(--accent)); font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:.5rem; }
+.featured-info h3 { font-family:'Syne',sans-serif; font-size:1.35rem; font-weight:800; letter-spacing:-.5px; margin-bottom:.5rem; }
+.featured-info p { color:var(--muted); font-size:.85rem; line-height:1.6; }
+.featured-price-box { text-align:right; flex-shrink:0; }
+.featured-price { font-family:'Syne',sans-serif; font-size:2.1rem; font-weight:800; color:var(--green); line-height:1; }
+.featured-old { font-size:.84rem; color:var(--muted); text-decoration:line-through; }
+.featured-off { font-size:.74rem; font-weight:700; background:rgba(0,230,118,.15); color:var(--green); padding:.2rem .5rem; border-radius:5px; display:inline-block; margin:.3rem 0; }
+.featured-btn {
+  margin-top:.5rem; display:inline-block; background:var(--niche-accent,var(--accent));
+  color:var(--niche-btn-text,#fff); padding:.58rem 1.4rem; border-radius:10px;
+  font-size:.78rem; font-weight:700; text-decoration:none; transition:.2s;
+}
+.featured-btn:hover { filter:brightness(1.1); }
+
+/* ===================== NICHE THEMES ===================== */
+[data-niche="celulares"]   { --niche-accent:#00d4ff; --niche-accent2:#0088ff; }
+[data-niche="informatica"] { --niche-accent:#00e676; --niche-accent2:#00bfa5; --niche-btn-text:#000; }
+[data-niche="casa"]        { --niche-accent:#f5a623; --niche-accent2:#e07b39; }
+[data-niche="moda"]        { --niche-accent:#ff6b9d; --niche-accent2:#c44dff; }
+[data-niche="calcados"]    { --niche-accent:#ff4d00; --niche-accent2:#ff9500; }
+[data-niche="games"]       { --niche-accent:#a855f7; --niche-accent2:#6366f1; }
+[data-niche="eletro"]      { --niche-accent:#38bdf8; --niche-accent2:#0284c7; }
+[data-niche="esportes"]    { --niche-accent:#ef4444; --niche-accent2:#f97316; }
+[data-niche="beleza"]      { --niche-accent:#f472b6; --niche-accent2:#e879f9; }
+[data-niche="brinquedos"]  { --niche-accent:#fbbf24; --niche-accent2:#f59e0b; --niche-btn-text:#000; }
+[data-niche="pet"]         { --niche-accent:#d97706; --niche-accent2:#92400e; }
+[data-niche="saude"]       { --niche-accent:#4ade80; --niche-accent2:#16a34a; --niche-btn-text:#000; }
+[data-niche="auto"]        { --niche-accent:#94a3b8; --niche-accent2:#475569; }
+[data-niche="ferramentas"] { --niche-accent:#eab308; --niche-accent2:#ca8a04; --niche-btn-text:#000; }
+[data-niche="livros"]      { --niche-accent:#2dd4bf; --niche-accent2:#0891b2; }
+[data-niche="arte"]        { --niche-accent:#818cf8; --niche-accent2:#6d28d9; }
+[data-niche="bebe"]        { --niche-accent:#86efac; --niche-accent2:#34d399; --niche-btn-text:#000; }
+
+[data-niche="celulares"]   .niche-hero-bg { background:radial-gradient(ellipse 70% 60% at 80% 20%,rgba(0,212,255,.12),transparent 60%),radial-gradient(ellipse 50% 50% at 10% 80%,rgba(0,136,255,.07),transparent 60%); }
+[data-niche="informatica"] .niche-hero-bg { background:radial-gradient(ellipse 60% 50% at 70% 30%,rgba(0,230,118,.1),transparent 60%); }
+[data-niche="casa"]        .niche-hero-bg { background:radial-gradient(ellipse 70% 50% at 30% 20%,rgba(245,166,35,.1),transparent 60%),radial-gradient(ellipse 50% 50% at 80% 80%,rgba(224,123,57,.07),transparent 60%); }
+[data-niche="moda"]        .niche-hero-bg { background:radial-gradient(ellipse 70% 60% at 60% 10%,rgba(255,107,157,.12),transparent 60%),radial-gradient(ellipse 50% 50% at 10% 80%,rgba(196,77,255,.07),transparent 60%); }
+[data-niche="calcados"]    .niche-hero-bg { background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(255,77,0,.14),transparent 70%); }
+[data-niche="games"]       .niche-hero-bg { background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(168,85,247,.15),transparent 60%),radial-gradient(ellipse 40% 40% at 90% 80%,rgba(99,102,241,.1),transparent 60%); }
+[data-niche="eletro"]      .niche-hero-bg { background:radial-gradient(ellipse 70% 50% at 70% 20%,rgba(56,189,248,.1),transparent 60%); }
+[data-niche="esportes"]    .niche-hero-bg { background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(239,68,68,.14),transparent 60%); }
+[data-niche="beleza"]      .niche-hero-bg { background:radial-gradient(ellipse 80% 60% at 40% 0%,rgba(244,114,182,.12),transparent 60%),radial-gradient(ellipse 50% 50% at 80% 90%,rgba(232,121,249,.07),transparent 60%); }
+[data-niche="brinquedos"]  .niche-hero-bg { background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(251,191,36,.14),transparent 60%); }
+[data-niche="pet"]         .niche-hero-bg { background:radial-gradient(ellipse 60% 50% at 60% 20%,rgba(217,119,6,.12),transparent 60%); }
+[data-niche="saude"]       .niche-hero-bg { background:radial-gradient(ellipse 70% 50% at 30% 20%,rgba(74,222,128,.1),transparent 60%); }
+[data-niche="auto"]        .niche-hero-bg { background:radial-gradient(ellipse 70% 50% at 70% 10%,rgba(148,163,184,.1),transparent 60%); }
+[data-niche="ferramentas"] .niche-hero-bg { background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(234,179,8,.12),transparent 60%); }
+[data-niche="livros"]      .niche-hero-bg { background:radial-gradient(ellipse 70% 50% at 40% 20%,rgba(45,212,191,.1),transparent 60%); }
+[data-niche="arte"]        .niche-hero-bg { background:radial-gradient(ellipse 70% 50% at 60% 10%,rgba(129,140,248,.12),transparent 60%); }
+[data-niche="bebe"]        .niche-hero-bg { background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(134,239,172,.12),transparent 60%); }
+
+[data-niche] .niche-tag { background:rgba(var(--niche-rgb,255,77,0),.1); }
+[data-niche="celulares"]   .niche-tag { background:rgba(0,212,255,.1);  border-color:rgba(0,212,255,.3);  color:#00d4ff; }
+[data-niche="informatica"] .niche-tag { background:rgba(0,230,118,.1);  border-color:rgba(0,230,118,.3);  color:#00e676; }
+[data-niche="casa"]        .niche-tag { background:rgba(245,166,35,.1); border-color:rgba(245,166,35,.3); color:#f5a623; }
+[data-niche="moda"]        .niche-tag { background:rgba(255,107,157,.1);border-color:rgba(255,107,157,.3);color:#ff6b9d; }
+[data-niche="calcados"]    .niche-tag { background:rgba(255,77,0,.1);   border-color:rgba(255,77,0,.3);   color:#ff4d00; }
+[data-niche="games"]       .niche-tag { background:rgba(168,85,247,.1); border-color:rgba(168,85,247,.3); color:#a855f7; }
+[data-niche="eletro"]      .niche-tag { background:rgba(56,189,248,.1); border-color:rgba(56,189,248,.3); color:#38bdf8; }
+[data-niche="esportes"]    .niche-tag { background:rgba(239,68,68,.1);  border-color:rgba(239,68,68,.3);  color:#ef4444; }
+[data-niche="beleza"]      .niche-tag { background:rgba(244,114,182,.1);border-color:rgba(244,114,182,.3);color:#f472b6; }
+[data-niche="brinquedos"]  .niche-tag { background:rgba(251,191,36,.1); border-color:rgba(251,191,36,.3); color:#fbbf24; }
+[data-niche="pet"]         .niche-tag { background:rgba(217,119,6,.1);  border-color:rgba(217,119,6,.3);  color:#d97706; }
+[data-niche="saude"]       .niche-tag { background:rgba(74,222,128,.1); border-color:rgba(74,222,128,.3); color:#4ade80; }
+[data-niche="auto"]        .niche-tag { background:rgba(148,163,184,.1);border-color:rgba(148,163,184,.3);color:#94a3b8; }
+[data-niche="ferramentas"] .niche-tag { background:rgba(234,179,8,.1);  border-color:rgba(234,179,8,.3);  color:#eab308; }
+[data-niche="livros"]      .niche-tag { background:rgba(45,212,191,.1); border-color:rgba(45,212,191,.3); color:#2dd4bf; }
+[data-niche="arte"]        .niche-tag { background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.3);color:#818cf8; }
+[data-niche="bebe"]        .niche-tag { background:rgba(134,239,172,.1);border-color:rgba(134,239,172,.3);color:#86efac; }
+
+[data-niche="celulares"]   .niche-meta-num{color:#00d4ff}
+[data-niche="informatica"] .niche-meta-num{color:#00e676}
+[data-niche="casa"]        .niche-meta-num{color:#f5a623}
+[data-niche="moda"]        .niche-meta-num{color:#ff6b9d}
+[data-niche="calcados"]    .niche-meta-num{color:#ff4d00}
+[data-niche="games"]       .niche-meta-num{color:#a855f7}
+[data-niche="eletro"]      .niche-meta-num{color:#38bdf8}
+[data-niche="esportes"]    .niche-meta-num{color:#ef4444}
+[data-niche="beleza"]      .niche-meta-num{color:#f472b6}
+[data-niche="brinquedos"]  .niche-meta-num{color:#fbbf24}
+[data-niche="pet"]         .niche-meta-num{color:#d97706}
+[data-niche="saude"]       .niche-meta-num{color:#4ade80}
+[data-niche="auto"]        .niche-meta-num{color:#94a3b8}
+[data-niche="ferramentas"] .niche-meta-num{color:#eab308}
+[data-niche="livros"]      .niche-meta-num{color:#2dd4bf}
+[data-niche="arte"]        .niche-meta-num{color:#818cf8}
+[data-niche="bebe"]        .niche-meta-num{color:#86efac}
+
+/* ===================== FOOTER ===================== */
+footer {
+  background:var(--bg2); border-top:1px solid var(--border);
+  padding:3rem 2rem; text-align:center;
+}
+.footer-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.5rem; margin-bottom:.6rem; }
+.footer-logo span { color:var(--accent); }
+.footer-desc { color:var(--muted); font-size:.84rem; max-width:460px; margin:0 auto 1.5rem; line-height:1.7; }
+.footer-stores { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; margin-bottom:2rem; }
+.footer-store-tag { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:.38rem .9rem; font-size:.76rem; font-weight:600; color:var(--muted); }
+.footer-disclaimer { font-size:.7rem; color:var(--muted); line-height:1.6; border-top:1px solid var(--border); padding-top:1.5rem; margin-top:1.5rem; max-width:800px; margin-left:auto; margin-right:auto; }
+
+/* ===================== RESPONSIVE ===================== */
+@media(max-width:768px) {
+  .header-nav { display:none; }
+  .hero h1 { letter-spacing:-1px; }
+  .hero-stats { gap:1.5rem; }
+  .banner { flex-direction:column; text-align:center; }
+  .banner-text p { max-width:100%; }
+  .banner-cta,.btn-primary,.btn-ghost { width:100%; }
+  .featured-card { flex-direction:column; }
+  .featured-price-box { text-align:left; }
+}
+
+/* ===== LAYOUT ===== */
+.main{max-width:1200px;margin:0 auto;padding:2.5rem 2rem 5rem;display:grid;grid-template-columns:1fr 420px;gap:2rem;align-items:start}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+
+/* ===== PAGE TITLE ===== */
+.page-hero{
+  grid-column:1/-1;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:1rem; margin-bottom:.5rem;
+}
+.page-hero-text h1{
+  font-family:'Syne',sans-serif; font-size:clamp(1.6rem,4vw,2.4rem);
+  font-weight:800; letter-spacing:-1px; line-height:1.1;
+}
+.page-hero-text h1 em{font-style:normal;color:var(--accent)}
+.page-hero-text p{color:var(--muted);font-size:.9rem;margin-top:.4rem}
+.stats-row{display:flex;gap:1.5rem;flex-wrap:wrap}
+.stat-mini{text-align:center}
+.stat-mini-num{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--accent);line-height:1}
+.stat-mini-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:.15rem}
+
+/* ===== FORM CARD ===== */
+.form-card{
+  background:var(--card); border:1px solid var(--border);
+  border-radius:20px; overflow:hidden;
+}
+.form-header{
+  padding:1.5rem 1.75rem 1.25rem;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:.75rem;
+}
+.form-header-icon{
+  width:38px; height:38px; border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem; flex-shrink:0;
+}
+.form-header h2{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700}
+.form-header p{font-size:.75rem;color:var(--muted);margin-top:.1rem}
+
+.form-body{padding:1.75rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-grid .full{grid-column:1/-1}
+
+/* fields */
+.field{display:flex;flex-direction:column;gap:.4rem}
+.field label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
+.field input,.field select,.field textarea{
+  background:var(--bg2); border:1px solid var(--border2);
+  border-radius:10px; padding:.65rem .9rem;
+  font-size:.88rem; color:var(--text); font-family:'DM Sans',sans-serif;
+  transition:.2s; outline:none;
+}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted2)}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--accent); background:var(--bg3);
+  box-shadow:0 0 0 3px rgba(255,77,0,.1);
+}
+.field select option{background:var(--bg2)}
+.field textarea{resize:vertical;min-height:80px;line-height:1.5}
+
+/* price row */
+.price-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+
+/* discount badge */
+.discount-badge{
+  background:var(--bg3); border:1px solid var(--border2);
+  border-radius:10px; padding:.65rem .9rem;
+  font-family:'Space Mono',monospace; font-size:1rem; font-weight:700;
+  color:var(--green); display:flex; align-items:center; gap:.4rem;
+}
+.discount-badge span{font-size:.7rem;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:400}
+
+/* store selector */
+.store-selector{display:flex;gap:.5rem;flex-wrap:wrap}
+.store-btn{
+  display:flex; align-items:center; gap:.4rem;
+  background:var(--bg2); border:1px solid var(--border2);
+  border-radius:8px; padding:.4rem .85rem; cursor:pointer;
+  font-size:.78rem; font-weight:600; transition:.2s; color:var(--text);
+}
+.store-btn:hover{border-color:var(--muted)}
+.store-btn.selected-amazon{background:rgba(255,153,0,.12);border-color:#FF9900;color:#FF9900}
+.store-btn.selected-shopee{background:rgba(238,77,45,.12);border-color:#EE4D2D;color:#EE4D2D}
+.store-btn.selected-ml{background:rgba(0,160,0,.12);border-color:#8cc800;color:#8cc800}
+.store-btn.selected-magalu{background:rgba(0,122,204,.12);border-color:#60b8ff;color:#60b8ff}
+.store-btn.selected-temu{background:rgba(88,101,242,.12);border-color:#8b9dff;color:#8b9dff}
+.store-btn.selected-ali{background:rgba(228,50,37,.12);border-color:#ff7a73;color:#ff7a73}
+
+/* emoji picker */
+.emoji-row{display:flex;gap:.4rem;flex-wrap:wrap}
+.emoji-btn{
+  background:var(--bg2); border:1px solid var(--border2);
+  border-radius:8px; padding:.35rem .6rem; cursor:pointer;
+  font-size:1.1rem; transition:.2s;
+}
+.emoji-btn:hover,.emoji-btn.active{border-color:var(--accent);background:rgba(255,77,0,.1)}
+
+/* tags */
+.tags-row{display:flex;gap:.4rem;flex-wrap:wrap}
+.tag-toggle{
+  background:var(--bg2); border:1px solid var(--border2);
+  border-radius:20px; padding:.3rem .75rem; cursor:pointer;
+  font-size:.72rem; font-weight:600; transition:.2s; color:var(--muted);
+}
+.tag-toggle:hover{color:var(--text);border-color:var(--muted)}
+.tag-toggle.active{background:rgba(255,77,0,.12);border-color:var(--accent);color:var(--accent)}
+
+/* char counter */
+.field-footer{display:flex;justify-content:space-between;align-items:center;margin-top:.3rem}
+.char-count{font-size:.68rem;color:var(--muted);font-family:'Space Mono',monospace}
+.char-count.warn{color:var(--accent2)}
+.char-count.over{color:var(--accent)}
+
+/* ===== ACTION BUTTONS ===== */
+.actions{display:flex;flex-direction:column;gap:.75rem;margin-top:1.5rem}
+.btn-wa{
+  display:flex; align-items:center; justify-content:center; gap:.6rem;
+  background:linear-gradient(135deg,var(--wa),var(--wa2));
+  color:#fff; border:none; border-radius:12px; padding:.85rem 1.5rem;
+  font-size:.9rem; font-weight:700; cursor:pointer; transition:.25s;
+  font-family:'DM Sans',sans-serif; width:100%;
+}
+.btn-wa:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 8px 24px rgba(37,211,102,.25)}
+.btn-wa:active{transform:translateY(0)}
+
+.btn-ig{
+  display:flex; align-items:center; justify-content:center; gap:.6rem;
+  background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3));
+  color:#fff; border:none; border-radius:12px; padding:.85rem 1.5rem;
+  font-size:.9rem; font-weight:700; cursor:pointer; transition:.25s;
+  font-family:'DM Sans',sans-serif; width:100%;
+}
+.btn-ig:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 8px 24px rgba(221,42,123,.25)}
+
+.btn-copy-text{
+  display:flex; align-items:center; justify-content:center; gap:.6rem;
+  background:var(--card2); border:1px solid var(--border2);
+  color:var(--text); border-radius:12px; padding:.75rem 1.5rem;
+  font-size:.85rem; font-weight:600; cursor:pointer; transition:.2s;
+  font-family:'DM Sans',sans-serif; width:100%;
+}
+.btn-copy-text:hover{border-color:var(--muted);background:var(--bg3)}
+
+.btn-clear{
+  background:transparent; border:none; color:var(--muted);
+  font-size:.78rem; cursor:pointer; padding:.4rem;
+  text-decoration:underline; font-family:'DM Sans',sans-serif;
+  transition:.2s; text-align:center; width:100%;
+}
+.btn-clear:hover{color:var(--text)}
+
+/* sent feedback */
+.sent-flash{
+  display:none; align-items:center; justify-content:center; gap:.5rem;
+  background:rgba(0,230,118,.12); border:1px solid rgba(0,230,118,.3);
+  border-radius:10px; padding:.7rem; font-size:.82rem; font-weight:600;
+  color:var(--green); margin-top:.5rem;
+}
+.sent-flash.show{display:flex;animation:flashIn .4s ease}
+@keyframes flashIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+
+/* ===== PREVIEW PANEL ===== */
+.preview-panel{display:flex;flex-direction:column;gap:1.25rem;position:sticky;top:80px}
+
+.preview-tabs{display:flex;gap:.4rem;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.3rem}
+.ptab{
+  flex:1; text-align:center; padding:.5rem;
+  border-radius:8px; cursor:pointer; font-size:.78rem;
+  font-weight:600; color:var(--muted); transition:.2s; border:none;
+  background:transparent; font-family:'DM Sans',sans-serif;
+}
+.ptab.active-wa{background:rgba(37,211,102,.15);color:var(--wa)}
+.ptab.active-ig{background:linear-gradient(135deg,rgba(245,133,41,.15),rgba(129,52,175,.15));color:#dd2a7b}
+.ptab.active-text{background:rgba(255,77,0,.1);color:var(--accent)}
+
+/* WhatsApp preview */
+.wa-preview-wrap{display:none}
+.wa-preview-wrap.active{display:block}
+.wa-phone{
+  background:#0a1828; border-radius:20px; overflow:hidden;
+  border:2px solid #1a2a3a; box-shadow:0 24px 60px rgba(0,0,0,.6);
+}
+.wa-status-bar{
+  background:#0a1828; padding:.5rem 1rem;
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:.7rem; color:#4a7a4a;
+}
+.wa-header{
+  background:#1a2a3a; padding:.7rem 1rem;
+  display:flex; align-items:center; gap:.7rem;
+}
+.wa-avatar{
+  width:34px; height:34px; border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex; align-items:center; justify-content:center; font-size:.9rem; flex-shrink:0;
+}
+.wa-contact{flex:1}
+.wa-contact-name{font-size:.82rem;font-weight:700;color:#e0e0e0}
+.wa-contact-status{font-size:.65rem;color:var(--wa)}
+.wa-body{background:#0d1b2a;padding:1rem;min-height:200px}
+.wa-bubble{
+  background:#1e3a2f; border-radius:12px 12px 2px 12px;
+  padding:.75rem 1rem; max-width:85%; margin-left:auto;
+  font-size:.8rem; line-height:1.6; color:#e8e8e8;
+  white-space:pre-wrap; word-break:break-word;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+.wa-bubble-time{text-align:right;font-size:.6rem;color:#4a8a6a;margin-top:.3rem;display:flex;align-items:center;justify-content:flex-end;gap:.3rem}
+.wa-input{background:#1a2a3a;padding:.6rem 1rem;display:flex;align-items:center;gap:.5rem}
+.wa-input-bar{flex:1;background:#2a3a4a;border-radius:20px;padding:.4rem .8rem;font-size:.72rem;color:#666}
+.wa-send{width:32px;height:32px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center;font-size:.9rem}
+
+/* Instagram preview */
+.ig-preview-wrap{display:none}
+.ig-preview-wrap.active{display:block}
+.ig-phone{
+  background:#000; border-radius:20px; overflow:hidden;
+  border:2px solid #222; box-shadow:0 24px 60px rgba(0,0,0,.6);
+}
+.ig-top-bar{background:#000;padding:.5rem 1rem;display:flex;align-items:center;gap:.5rem}
+.ig-logo{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:800;background:linear-gradient(135deg,#f58529,#dd2a7b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ig-post-header{background:#000;padding:.6rem 1rem;display:flex;align-items:center;gap:.6rem}
+.ig-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--ig1),var(--ig3));display:flex;align-items:center;justify-content:center;font-size:.7rem;border:2px solid var(--ig2)}
+.ig-username{font-size:.75rem;font-weight:700;color:#fff}
+.ig-post-img{
+  width:100%;aspect-ratio:1;
+  background:linear-gradient(135deg,#1a0a00,#0a0a1a,#001a1a);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;
+  position:relative;overflow:hidden;
+}
+.ig-post-img-emoji{font-size:4rem}
+.ig-post-img-price{
+  font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;
+  color:var(--green);
+}
+.ig-post-img-badge{
+  position:absolute;top:10px;right:10px;
+  background:var(--accent);color:#fff;font-size:.7rem;font-weight:800;
+  padding:.3rem .6rem;border-radius:6px;
+}
+.ig-post-img-store{
+  position:absolute;bottom:10px;left:10px;
+  background:rgba(0,0,0,.7);color:#fff;font-size:.65rem;font-weight:700;
+  padding:.25rem .5rem;border-radius:5px;backdrop-filter:blur(8px);
+}
+.ig-actions{background:#000;padding:.5rem 1rem;display:flex;gap:.8rem}
+.ig-action-btn{font-size:1.1rem;cursor:pointer}
+.ig-caption{background:#000;padding:.4rem 1rem .8rem;font-size:.72rem;color:#ccc;line-height:1.5;white-space:pre-wrap;word-break:break-word;max-height:120px;overflow-y:auto}
+.ig-caption strong{color:#fff}
+
+/* Raw text preview */
+.text-preview-wrap{display:none}
+.text-preview-wrap.active{display:block}
+.text-box{
+  background:var(--bg2); border:1px solid var(--border2);
+  border-radius:14px; padding:1.25rem; font-size:.82rem;
+  line-height:1.7; color:var(--text); white-space:pre-wrap;
+  word-break:break-word; font-family:'Space Mono',monospace;
+  min-height:200px; position:relative;
+}
+.text-box-label{
+  position:absolute;top:-10px;left:14px;
+  background:var(--bg);padding:0 .4rem;
+  font-size:.65rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.5px;
+}
+
+/* char counters for platforms */
+.platform-limits{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.75rem}
+.limit-pill{
+  display:flex;align-items:center;gap:.4rem;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:.3rem .7rem;font-size:.7rem;
+}
+.limit-bar{width:60px;height:4px;background:var(--border2);border-radius:2px;overflow:hidden}
+.limit-fill{height:100%;background:var(--green);border-radius:2px;transition:.3s}
+.limit-fill.warn{background:var(--accent2)}
+.limit-fill.over{background:var(--accent)}
+.limit-num{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted)}
+
+/* ===== HISTORY ===== */
+.history-section{grid-column:1/-1;margin-top:1rem}
+.history-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.history-header h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700}
+.btn-clear-history{background:transparent;border:1px solid var(--border);border-radius:8px;padding:.3rem .8rem;font-size:.72rem;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:.2s}
+.btn-clear-history:hover{color:var(--text);border-color:var(--muted)}
+.history-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.75rem}
+.history-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:1rem;display:flex;flex-direction:column;gap:.6rem;
+  transition:.25s;
+}
+.history-card:hover{border-color:var(--border2);background:var(--card2)}
+.history-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem}
+.history-card-title{font-size:.84rem;font-weight:600;line-height:1.3;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.history-card-store{font-size:.65rem;font-weight:700;padding:.18rem .45rem;border-radius:5px}
+.history-card-prices{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.h-price{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--green)}
+.h-old{font-size:.75rem;color:var(--muted);text-decoration:line-through}
+.h-off{font-size:.68rem;font-weight:700;background:rgba(0,230,118,.12);color:var(--green);padding:.1rem .35rem;border-radius:4px}
+.history-card-actions{display:flex;gap:.4rem;margin-top:.25rem}
+.h-btn{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:.3rem;
+  padding:.42rem;border-radius:8px;font-size:.72rem;font-weight:700;
+  cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:.2s;
+}
+.h-btn-wa{background:rgba(37,211,102,.15);color:var(--wa)}
+.h-btn-wa:hover{background:rgba(37,211,102,.25)}
+.h-btn-ig{background:linear-gradient(135deg,rgba(245,133,41,.15),rgba(129,52,175,.15));color:#dd2a7b}
+.h-btn-ig:hover{background:linear-gradient(135deg,rgba(245,133,41,.25),rgba(129,52,175,.25))}
+.h-btn-del{background:rgba(255,77,0,.1);color:var(--muted)}
+.h-btn-del:hover{color:var(--accent)}
+.h-date{font-size:.65rem;color:var(--muted2)}
+
+.empty-history{
+  grid-column:1/-1;text-align:center;padding:2rem;
+  color:var(--muted);font-size:.85rem;
+}
+.empty-history .icon{font-size:2rem;margin-bottom:.5rem;opacity:.4}
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;bottom:2rem;right:2rem;z-index:9998;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:12px;padding:.8rem 1.25rem;
+  display:flex;align-items:center;gap:.6rem;
+  font-size:.82rem;font-weight:600;
+  box-shadow:0 12px 32px rgba(0,0,0,.5);
+  transform:translateY(20px);opacity:0;
+  transition:all .3s ease;pointer-events:none;
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success .toast-icon{color:var(--green)}
+.toast.wa-toast .toast-icon{color:var(--wa)}
+.toast.ig-toast .toast-icon{color:#dd2a7b}
+
+/* ===== DIVIDER ===== */
+.divider{
+  grid-column:1/-1;
+  border:none;border-top:1px solid var(--border);
+  margin:.5rem 0;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.form-card{animation:fadeUp .4s ease both}
+.preview-panel{animation:fadeUp .4s .1s ease both}
+
+</style>
+</head>
+<body>
+
+<!-- ==================== SHARED HEADER ==================== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" onclick="showPage('home')" href="#">
+      <div class="logo-dot"></div>Promo<span>Hub</span>
+    </a>
+    <nav class="header-nav">
+      <a onclick="showPage('home')">Início</a>
+      <a onclick="showPage('celulares')">Celulares</a>
+      <a onclick="showPage('games')">Games</a>
+      <a onclick="showPage('moda')">Moda</a>
+      <a onclick="showPage('casa')">Casa</a>
+      <a onclick="showPage('beleza')">Beleza</a>
+      <a onclick="showPage('esportes')">Esportes</a>
+      <a onclick="showPage('central')">📢 Publicar</a>
+    </nav>
+    <div class="header-badge">🔥 Ao Vivo</div>
+  </div>
+</header>
+
+<!-- ==================== HOME ==================== -->
+<div id="home" class="page active">
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-inner">
+      <span>FRETE GRÁTIS na Amazon acima de R$99</span><span>Shopee — Cupom NOVO10 — 10% OFF</span>
+      <span>Magalu — Até 60% em Eletrônicos</span><span>Temu — Primeiros pedidos com 70% de desconto</span>
+      <span>AliExpress — Sale 11.11 descontos incríveis</span><span>Mercado Livre — Ofertas do Dia renovadas</span>
+      <span>FRETE GRÁTIS na Amazon acima de R$99</span><span>Shopee — Cupom NOVO10 — 10% OFF</span>
+      <span>Magalu — Até 60% em Eletrônicos</span><span>Temu — Primeiros pedidos com 70% de desconto</span>
+      <span>AliExpress — Sale 11.11 descontos incríveis</span><span>Mercado Livre — Ofertas do Dia renovadas</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-tag">⚡ Atualizado em tempo real</div>
+    <h1>As melhores <em>ofertas</em><br>do Brasil reunidas</h1>
+    <p>Comparamos preços em Amazon, Shopee, Mercado Livre, Magalu, Temu e AliExpress para você sempre pagar menos.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">12K+</div><div class="stat-label">Promoções ativas</div></div>
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Grandes lojas</div></div>
+      <div class="stat"><div class="stat-num">R$2M+</div><div class="stat-label">Economizados</div></div>
+      <div class="stat"><div class="stat-num">38K</div><div class="stat-label">Usuários ativos</div></div>
+    </div>
+  </section>
+
+  <!-- STORES -->
+  <div class="stores-section">
+    <div class="section-label">Parceiros oficiais</div>
+    <div class="stores-grid">
+      <div class="store-pill active"><div class="store-icon">📦</div><span class="store-name">Amazon</span></div>
+      <div class="store-pill"><div class="store-icon">🛍️</div><span class="store-name">Shopee</span></div>
+      <div class="store-pill"><div class="store-icon">🛒</div><span class="store-name">Mercado Livre</span></div>
+      <div class="store-pill"><div class="store-icon">💛</div><span class="store-name">Magalu</span></div>
+      <div class="store-pill"><div class="store-icon">🌐</div><span class="store-name">Temu</span></div>
+      <div class="store-pill"><div class="store-icon">✈️</div><span class="store-name">AliExpress</span></div>
+    </div>
+  </div>
+
+  <!-- NICHES -->
+  <div class="niches-section">
+    <div class="section-label">Filtrar por nicho</div>
+    <div class="niches-scroll">
+      <div class="niche-chip active">🔥 Tudo</div>
+      <div class="niche-chip" onclick="showPage('celulares')">📱 Celulares</div>
+      <div class="niche-chip" onclick="showPage('informatica')">💻 Informática</div>
+      <div class="niche-chip" onclick="showPage('casa')">🏠 Casa & Jardim</div>
+      <div class="niche-chip" onclick="showPage('moda')">👗 Moda</div>
+      <div class="niche-chip" onclick="showPage('calcados')">👟 Calçados</div>
+      <div class="niche-chip" onclick="showPage('games')">🎮 Games</div>
+      <div class="niche-chip" onclick="showPage('eletro')">📺 Eletrodomésticos</div>
+      <div class="niche-chip" onclick="showPage('esportes')">🏋️ Esportes</div>
+      <div class="niche-chip" onclick="showPage('beleza')">💄 Beleza</div>
+      <div class="niche-chip" onclick="showPage('brinquedos')">🧸 Brinquedos</div>
+      <div class="niche-chip" onclick="showPage('pet')">🐾 Pet Shop</div>
+      <div class="niche-chip" onclick="showPage('saude')">🌿 Saúde</div>
+      <div class="niche-chip" onclick="showPage('auto')">🚗 Automotivo</div>
+      <div class="niche-chip" onclick="showPage('ferramentas')">🔧 Ferramentas</div>
+      <div class="niche-chip" onclick="showPage('livros')">📚 Livros</div>
+      <div class="niche-chip" onclick="showPage('arte')">🎨 Arte & Hobby</div>
+      <div class="niche-chip" onclick="showPage('bebe')">👶 Bebê</div>
+    </div>
+  </div>
+
+  <!-- DESTAQUES -->
+  <div class="home-products">
+    <div class="section-header">
+      <h2 class="section-title">🔥 Ofertas em destaque</h2>
+      <a href="#" class="see-all">Ver todas →</a>
+    </div>
+    <div class="card-grid">
+      <div class="hcard"><div class="hcard-badges"><span class="hbadge hb-hot">Hot</span></div><span class="hcard-store hs-amazon">Amazon</span><div class="hcard-img">📱</div><div class="hcard-body"><div class="hcard-cat">Celulares</div><div class="hcard-title">Samsung Galaxy A55 5G 256GB — Câmera tripla 50MP</div><div class="hcard-pricing"><span class="hprice-now">R$ 1.499</span><span class="hprice-old">R$ 2.099</span><span class="hprice-off">-29%</span></div><a href="#" class="hcard-btn">Ver na Amazon →</a></div></div>
+      <div class="hcard"><div class="hcard-badges"><span class="hbadge hb-sale">-55%</span></div><span class="hcard-store hs-shopee">Shopee</span><div class="hcard-img">🎧</div><div class="hcard-body"><div class="hcard-cat">Eletrônicos</div><div class="hcard-title">Fone Bluetooth 5.3 TWS cancelamento de ruído ativo</div><div class="hcard-pricing"><span class="hprice-now">R$ 59</span><span class="hprice-old">R$ 130</span><span class="hprice-off">-55%</span></div><a href="#" class="hcard-btn">Ver na Shopee →</a></div></div>
+      <div class="hcard"><div class="hcard-badges"><span class="hbadge hb-new">Novo</span></div><span class="hcard-store hs-ml">Mercado L.</span><div class="hcard-img">💻</div><div class="hcard-body"><div class="hcard-cat">Informática</div><div class="hcard-title">Notebook Lenovo IdeaPad 15" i5 12ª gen 8GB SSD 512GB</div><div class="hcard-pricing"><span class="hprice-now">R$ 2.799</span><span class="hprice-old">R$ 3.499</span><span class="hprice-off">-20%</span></div><a href="#" class="hcard-btn">Ver no M. Livre →</a></div></div>
+      <div class="hcard"><div class="hcard-badges"><span class="hbadge hb-best">Top</span></div><span class="hcard-store hs-magalu">Magalu</span><div class="hcard-img">📺</div><div class="hcard-body"><div class="hcard-cat">Eletros</div><div class="hcard-title">Smart TV LG 50" 4K UHD HDR10 WebOS 2024</div><div class="hcard-pricing"><span class="hprice-now">R$ 1.899</span><span class="hprice-old">R$ 2.799</span><span class="hprice-off">-32%</span></div><a href="#" class="hcard-btn">Ver na Magalu →</a></div></div>
+      <div class="hcard"><div class="hcard-badges"><span class="hbadge hb-hot">Hot</span></div><span class="hcard-store hs-temu">Temu</span><div class="hcard-img">🏠</div><div class="hcard-body"><div class="hcard-cat">Casa</div><div class="hcard-title">Kit 20 utensílios de cozinha silicone antiaderente colorido</div><div class="hcard-pricing"><span class="hprice-now">R$ 38</span><span class="hprice-old">R$ 120</span><span class="hprice-off">-68%</span></div><a href="#" class="hcard-btn">Ver na Temu →</a></div></div>
+      <div class="hcard"><div class="hcard-badges"><span class="hbadge hb-sale">-40%</span></div><span class="hcard-store hs-ali">AliExpress</span><div class="hcard-img">⌚</div><div class="hcard-body"><div class="hcard-cat">Acessórios</div><div class="hcard-title">Smartwatch Amazfit GTS 4 Mini GPS frequência cardíaca SpO2</div><div class="hcard-pricing"><span class="hprice-now">R$ 299</span><span class="hprice-old">R$ 499</span><span class="hprice-off">-40%</span></div><a href="#" class="hcard-btn">Ver no AliExpress →</a></div></div>
+      <div class="hcard"><div class="hcard-badges"><span class="hbadge hb-new">Novo</span></div><span class="hcard-store hs-amazon">Amazon</span><div class="hcard-img">🎮</div><div class="hcard-body"><div class="hcard-cat">Games</div><div class="hcard-title">Controle sem fio Xbox Series X/S bateria recarregável</div><div class="hcard-pricing"><span class="hprice-now">R$ 349</span><span class="hprice-old">R$ 449</span><span class="hprice-off">-22%</span></div><a href="#" class="hcard-btn">Ver na Amazon →</a></div></div>
+      <div class="hcard"><div class="hcard-badges"><span class="hbadge hb-hot">Hot</span></div><span class="hcard-store hs-shopee">Shopee</span><div class="hcard-img">👟</div><div class="hcard-body"><div class="hcard-cat">Calçados</div><div class="hcard-title">Tênis Running feminino air cushion leve respirável amortecimento</div><div class="hcard-pricing"><span class="hprice-now">R$ 89</span><span class="hprice-old">R$ 199</span><span class="hprice-off">-55%</span></div><a href="#" class="hcard-btn">Ver na Shopee →</a></div></div>
+    </div>
+  </div>
+
+  <!-- BANNER -->
+  <div class="banner-wrap">
+    <div class="banner">
+      <div class="banner-text">
+        <h2>🔔 Ative os alertas<br>de promoção</h2>
+        <p>Receba notificações quando o produto que você quer entrar em promoção. Nunca mais perca uma oferta!</p>
+      </div>
+      <div class="banner-cta">
+        <button class="btn-primary">Ativar alertas grátis</button>
+        <button class="btn-ghost">Saiba mais</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="cat-section">
+    <div class="section-header">
+      <h2 class="section-title">Explorar por categoria</h2>
+      <span class="see-all" style="cursor:pointer">Ver todas →</span>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card" onclick="showPage('celulares')"><div class="cat-icon">📱</div><div class="cat-name">Celulares</div><div class="cat-count">1.240 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('informatica')"><div class="cat-icon">💻</div><div class="cat-name">Informática</div><div class="cat-count">892 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('casa')"><div class="cat-icon">🏠</div><div class="cat-name">Casa & Jardim</div><div class="cat-count">3.100 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('moda')"><div class="cat-icon">👗</div><div class="cat-name">Moda</div><div class="cat-count">5.200 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('calcados')"><div class="cat-icon">👟</div><div class="cat-name">Calçados</div><div class="cat-count">1.780 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('games')"><div class="cat-icon">🎮</div><div class="cat-name">Games</div><div class="cat-count">670 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('eletro')"><div class="cat-icon">📺</div><div class="cat-name">Eletrodomésticos</div><div class="cat-count">430 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('esportes')"><div class="cat-icon">🏋️</div><div class="cat-name">Esportes</div><div class="cat-count">960 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('beleza')"><div class="cat-icon">💄</div><div class="cat-name">Beleza</div><div class="cat-count">2.100 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('brinquedos')"><div class="cat-icon">🧸</div><div class="cat-name">Brinquedos</div><div class="cat-count">780 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('pet')"><div class="cat-icon">🐾</div><div class="cat-name">Pet Shop</div><div class="cat-count">530 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('saude')"><div class="cat-icon">🌿</div><div class="cat-name">Saúde</div><div class="cat-count">890 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('auto')"><div class="cat-icon">🚗</div><div class="cat-name">Automotivo</div><div class="cat-count">340 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('ferramentas')"><div class="cat-icon">🔧</div><div class="cat-name">Ferramentas</div><div class="cat-count">420 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('livros')"><div class="cat-icon">📚</div><div class="cat-name">Livros</div><div class="cat-count">1.500 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('arte')"><div class="cat-icon">🎨</div><div class="cat-name">Arte & Hobby</div><div class="cat-count">310 ofertas</div></div>
+      <div class="cat-card" onclick="showPage('bebe')"><div class="cat-icon">👶</div><div class="cat-name">Bebê</div><div class="cat-count">640 ofertas</div></div>
+    </div>
+  </div>
+
+  <!-- FOOTER HOME -->
+  <footer>
+    <div class="footer-logo">Promo<span>Hub</span></div>
+    <div class="footer-desc">Encontramos as melhores promoções nas maiores lojas do Brasil para você economizar sempre. Somos um site de curadoria de ofertas com links de afiliados.</div>
+    <div class="footer-stores">
+      <div class="footer-store-tag">📦 Amazon</div><div class="footer-store-tag">🛍️ Shopee</div>
+      <div class="footer-store-tag">🛒 Mercado Livre</div><div class="footer-store-tag">💛 Magalu</div>
+      <div class="footer-store-tag">🌐 Temu</div><div class="footer-store-tag">✈️ AliExpress</div>
+    </div>
+    <div class="footer-disclaimer">⚠️ <strong>Divulgação de afiliado:</strong> Este site contém links de afiliados. Quando você compra através dos nossos links, podemos receber uma comissão sem custo adicional para você. Os preços e disponibilidade podem variar. Sempre verifique o preço final na loja parceira antes de concluir a compra.</div>
+  </footer>
+</div><!-- /home -->
+
+<!-- ==================== 📱 CELULARES ==================== -->
+<div id="celulares" class="page" data-niche="celulares">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>📱 Celulares</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">📱 Celulares & Smartphones</div>
+    <h1>Os melhores celulares<br>pelo menor preço</h1>
+    <p>Compare preços de smartphones em Amazon, Shopee, Mercado Livre, Magalu e mais.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">1.240</div><div class="niche-meta-label">Ofertas ativas</div></div><div><div class="niche-meta-num">até 45%</div><div class="niche-meta-label">Desconto máximo</div></div><div><div class="niche-meta-num">6</div><div class="niche-meta-label">Lojas parceiras</div></div></div>
+  </div></div>
+  <div class="featured-row"><div class="featured-card"><div class="big-icon">📱</div><div class="featured-info"><div class="tag">⭐ Destaque da semana</div><h3>iPhone 15 128GB — Preto Meia-Noite</h3><p>Apple A16 Bionic · Câmera 48MP · Dynamic Island · USB-C · 5G</p></div><div class="featured-price-box"><div class="featured-price">R$ 3.799</div><div class="featured-old">R$ 4.999</div><div class="featured-off">-24%</div><a href="#" class="featured-btn">Ver na Amazon</a></div></div></div>
+  <div class="filters-bar"><span class="filter-label">Marca:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Samsung</button><button class="filter-btn">Apple</button><button class="filter-btn">Xiaomi</button><button class="filter-btn">Motorola</button></div><select class="sort-select"><option>Maior desconto</option><option>Menor preço</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>📱 Smartphones em oferta</h2><span class="products-count">1.240 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">📱</div><div class="ncard-body"><div class="ncard-cat">Samsung</div><div class="ncard-title">Samsung Galaxy S24 256GB 5G — IA Galaxy</div><div class="ncard-pricing"><span class="nprice-now">R$ 2.999</span><span class="nprice-old">R$ 3.999</span><span class="nprice-off">-25%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-sale">-55%</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">📱</div><div class="ncard-body"><div class="ncard-cat">Xiaomi</div><div class="ncard-title">Redmi Note 13 Pro 256GB câmera 200MP</div><div class="ncard-pricing"><span class="nprice-now">R$ 899</span><span class="nprice-old">R$ 1.999</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">📱</div><div class="ncard-body"><div class="ncard-cat">Motorola</div><div class="ncard-title">Moto G84 5G 256GB câmera 50MP tela 6.5" pOLED</div><div class="ncard-pricing"><span class="nprice-now">R$ 1.199</span><span class="nprice-old">R$ 1.599</span><span class="nprice-off">-25%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">📱</div><div class="ncard-body"><div class="ncard-cat">Samsung</div><div class="ncard-title">Galaxy A55 5G 128GB câmera tripla OIS</div><div class="ncard-pricing"><span class="nprice-now">R$ 1.499</span><span class="nprice-old">R$ 2.099</span><span class="nprice-off">-29%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">📱</div><div class="ncard-body"><div class="ncard-cat">Poco</div><div class="ncard-title">Poco X6 Pro 256GB 5G Dimensity 8300 Ultra</div><div class="ncard-pricing"><span class="nprice-now">R$ 1.349</span><span class="nprice-old">R$ 2.200</span><span class="nprice-off">-39%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-40%</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">📱</div><div class="ncard-body"><div class="ncard-cat">Acessório</div><div class="ncard-title">Capinha MagSafe iPhone 15/14/13 silicone premium</div><div class="ncard-pricing"><span class="nprice-now">R$ 29</span><span class="nprice-old">R$ 49</span><span class="nprice-off">-41%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">📱</div><div class="ncard-body"><div class="ncard-cat">Apple</div><div class="ncard-title">iPhone 14 128GB todas as cores disponíveis</div><div class="ncard-pricing"><span class="nprice-now">R$ 3.299</span><span class="nprice-old">R$ 4.499</span><span class="nprice-off">-27%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🎧</div><div class="ncard-body"><div class="ncard-cat">Fone</div><div class="ncard-title">Fone Bluetooth TWS 5.3 cancelamento de ruído ANC</div><div class="ncard-pricing"><span class="nprice-now">R$ 59</span><span class="nprice-old">R$ 149</span><span class="nprice-off">-60%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você. Preços sujeitos a alteração.</div></footer>
+</div>
+
+<!-- ==================== 💻 INFORMÁTICA ==================== -->
+<div id="informatica" class="page" data-niche="informatica">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>💻 Informática</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">💻 Informática & Tech</div>
+    <h1>Notebooks, PCs e<br>periféricos com desconto</h1>
+    <p>Do notebook gamer ao mouse ergonômico. O melhor preço em todas as lojas parceiras.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">892</div><div class="niche-meta-label">Ofertas ativas</div></div><div><div class="niche-meta-num">até 35%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Tipo:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Notebooks</button><button class="filter-btn">Periféricos</button><button class="filter-btn">Monitores</button></div><select class="sort-select"><option>Maior desconto</option><option>Menor preço</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>💻 Informática em oferta</h2><span class="products-count">892 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">💻</div><div class="ncard-body"><div class="ncard-cat">Notebook</div><div class="ncard-title">Lenovo IdeaPad i5 12ª gen 8GB SSD 512GB</div><div class="ncard-pricing"><span class="nprice-now">R$ 2.799</span><span class="nprice-old">R$ 3.499</span><span class="nprice-off">-20%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">🖥️</div><div class="ncard-body"><div class="ncard-cat">Monitor</div><div class="ncard-title">LG 27" Full HD IPS 144Hz FreeSync Premium</div><div class="ncard-pricing"><span class="nprice-now">R$ 1.099</span><span class="nprice-old">R$ 1.599</span><span class="nprice-off">-31%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-50%</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🖱️</div><div class="ncard-body"><div class="ncard-cat">Mouse</div><div class="ncard-title">Mouse Gamer sem fio 16000 DPI RGB 6 botões</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 159</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">⌨️</div><div class="ncard-body"><div class="ncard-cat">Teclado</div><div class="ncard-title">Teclado mecânico 75% hot-swap switches gateron</div><div class="ncard-pricing"><span class="nprice-now">R$ 189</span><span class="nprice-old">R$ 350</span><span class="nprice-off">-46%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">💾</div><div class="ncard-body"><div class="ncard-cat">SSD</div><div class="ncard-title">Samsung 990 Pro 1TB NVMe M.2 PCIe 4.0</div><div class="ncard-pricing"><span class="nprice-now">R$ 469</span><span class="nprice-old">R$ 699</span><span class="nprice-off">-33%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-35%</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🖨️</div><div class="ncard-body"><div class="ncard-cat">Impressora</div><div class="ncard-title">HP Deskjet 2874 multifuncional Wi-Fi</div><div class="ncard-pricing"><span class="nprice-now">R$ 389</span><span class="nprice-old">R$ 599</span><span class="nprice-off">-35%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🎧</div><div class="ncard-body"><div class="ncard-cat">Headset</div><div class="ncard-title">Headset gamer 7.1 surround USB RGB microfone</div><div class="ncard-pricing"><span class="nprice-now">R$ 69</span><span class="nprice-old">R$ 149</span><span class="nprice-off">-54%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">💻</div><div class="ncard-body"><div class="ncard-cat">Gamer</div><div class="ncard-title">Acer Nitro 5 RTX 4060 i7 16GB 512GB SSD</div><div class="ncard-pricing"><span class="nprice-now">R$ 4.999</span><span class="nprice-old">R$ 6.499</span><span class="nprice-off">-23%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 🏠 CASA ==================== -->
+<div id="casa" class="page" data-niche="casa">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>🏠 Casa & Jardim</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">🏠 Casa & Jardim</div><h1>Transforme sua casa<br>gastando menos</h1>
+    <p>Móveis, decoração, utilidades domésticas. Os melhores preços para o seu lar.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">3.100</div><div class="niche-meta-label">Ofertas ativas</div></div><div><div class="niche-meta-num">até 70%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Tipo:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Cozinha</button><button class="filter-btn">Quarto</button><button class="filter-btn">Jardim</button><button class="filter-btn">Decoração</button></div><select class="sort-select"><option>Maior desconto</option><option>Menor preço</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>🏠 Casa & Jardim em oferta</h2><span class="products-count">3.100 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🍳</div><div class="ncard-body"><div class="ncard-cat">Cozinha</div><div class="ncard-title">Kit 20 utensílios silicone antiaderente colorido</div><div class="ncard-pricing"><span class="nprice-now">R$ 38</span><span class="nprice-old">R$ 120</span><span class="nprice-off">-68%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🪴</div><div class="ncard-body"><div class="ncard-cat">Jardim</div><div class="ncard-title">10 vasos autoirrigáveis plástico resistente UV</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 199</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-45%</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🛋️</div><div class="ncard-body"><div class="ncard-cat">Sala</div><div class="ncard-title">Almofadas decorativas kit 4 peças veludo 45x45cm</div><div class="ncard-pricing"><span class="nprice-now">R$ 59</span><span class="nprice-old">R$ 109</span><span class="nprice-off">-46%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">💡</div><div class="ncard-body"><div class="ncard-cat">Iluminação</div><div class="ncard-title">Lâmpada LED smart Wi-Fi 9W RGB Alexa Google</div><div class="ncard-pricing"><span class="nprice-now">R$ 49</span><span class="nprice-old">R$ 89</span><span class="nprice-off">-45%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">🪑</div><div class="ncard-body"><div class="ncard-cat">Escritório</div><div class="ncard-title">Cadeira ergonômica mesh suporte lombar home office</div><div class="ncard-pricing"><span class="nprice-now">R$ 399</span><span class="nprice-old">R$ 799</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-60%</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🧹</div><div class="ncard-body"><div class="ncard-cat">Limpeza</div><div class="ncard-title">Robô aspirador Wi-Fi laser 2700Pa sucção</div><div class="ncard-pricing"><span class="nprice-now">R$ 549</span><span class="nprice-old">R$ 1.399</span><span class="nprice-off">-61%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🖼️</div><div class="ncard-body"><div class="ncard-cat">Decoração</div><div class="ncard-title">Quadros decorativos conjunto 3 peças 60x40</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 159</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🌡️</div><div class="ncard-body"><div class="ncard-cat">Clima</div><div class="ncard-title">Ventilador de torre 65W 3 velocidades ultra silencioso</div><div class="ncard-pricing"><span class="nprice-now">R$ 159</span><span class="nprice-old">R$ 299</span><span class="nprice-off">-47%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 👗 MODA ==================== -->
+<div id="moda" class="page" data-niche="moda">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>👗 Moda</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">👗 Moda & Estilo</div><h1>Moda com estilo<br>sem gastar muito</h1>
+    <p>Roupas femininas, masculinas, plus size e muito mais. As tendências com os melhores preços.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">5.200</div><div class="niche-meta-label">Peças em oferta</div></div><div><div class="niche-meta-num">até 75%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Segmento:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Feminino</button><button class="filter-btn">Masculino</button><button class="filter-btn">Plus Size</button><button class="filter-btn">Acessórios</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>👗 Moda em oferta</h2><span class="products-count">5.200 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">👗</div><div class="ncard-body"><div class="ncard-cat">Feminino</div><div class="ncard-title">Vestido midi floral manga longa elegante festa casual</div><div class="ncard-pricing"><span class="nprice-now">R$ 69</span><span class="nprice-old">R$ 189</span><span class="nprice-off">-63%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">👔</div><div class="ncard-body"><div class="ncard-cat">Masculino</div><div class="ncard-title">Kit 5 camisetas básicas 100% algodão premium</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 249</span><span class="nprice-off">-64%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-50%</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">👜</div><div class="ncard-body"><div class="ncard-cat">Bolsas</div><div class="ncard-title">Bolsa feminina couro PU shoulder bag tendência 2024</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 159</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">👖</div><div class="ncard-body"><div class="ncard-cat">Jeans</div><div class="ncard-title">Calça jeans feminina skinny cintura alta lycra</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 159</span><span class="nprice-off">-44%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🧥</div><div class="ncard-body"><div class="ncard-cat">Inverno</div><div class="ncard-title">Jaqueta corta vento impermeável unissex outdoor</div><div class="ncard-pricing"><span class="nprice-now">R$ 119</span><span class="nprice-old">R$ 299</span><span class="nprice-off">-60%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🧣</div><div class="ncard-body"><div class="ncard-cat">Acessórios</div><div class="ncard-title">Kit cachecol luva touca tricô inverno feminino</div><div class="ncard-pricing"><span class="nprice-now">R$ 35</span><span class="nprice-old">R$ 89</span><span class="nprice-off">-61%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-sale">-55%</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">💍</div><div class="ncard-body"><div class="ncard-cat">Joias</div><div class="ncard-title">Conjunto colar brinco pulseira prata 925 zircônia</div><div class="ncard-pricing"><span class="nprice-now">R$ 49</span><span class="nprice-old">R$ 109</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">🕶️</div><div class="ncard-body"><div class="ncard-cat">Óculos</div><div class="ncard-title">Óculos de sol polarizado UV400 armação acetato</div><div class="ncard-pricing"><span class="nprice-now">R$ 59</span><span class="nprice-old">R$ 149</span><span class="nprice-off">-60%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 👟 CALÇADOS ==================== -->
+<div id="calcados" class="page" data-niche="calcados">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>👟 Calçados</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">👟 Calçados & Tênis</div><h1>Do casual ao esportivo<br>pisando no desconto</h1>
+    <p>Tênis, sandálias, botas e sapatilhas com preços que cabem no bolso.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">1.780</div><div class="niche-meta-label">Pares em oferta</div></div><div><div class="niche-meta-num">até 65%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Tipo:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Tênis</button><button class="filter-btn">Sandálias</button><button class="filter-btn">Botas</button><button class="filter-btn">Sociais</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>👟 Calçados em oferta</h2><span class="products-count">1.780 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">👟</div><div class="ncard-body"><div class="ncard-cat">Running</div><div class="ncard-title">Tênis Running feminino air cushion leve respirável</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 199</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🥾</div><div class="ncard-body"><div class="ncard-cat">Trilha</div><div class="ncard-title">Bota coturno couro legítimo masculino Caterpillar</div><div class="ncard-pricing"><span class="nprice-now">R$ 279</span><span class="nprice-old">R$ 499</span><span class="nprice-off">-44%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-60%</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🩴</div><div class="ncard-body"><div class="ncard-cat">Sandálias</div><div class="ncard-title">Sandália slide plataforma confortável verão feminino</div><div class="ncard-pricing"><span class="nprice-now">R$ 29</span><span class="nprice-old">R$ 74</span><span class="nprice-off">-61%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">👟</div><div class="ncard-body"><div class="ncard-cat">Casual</div><div class="ncard-title">Adidas Grand Court 2.0 masculino couro ecológico</div><div class="ncard-pricing"><span class="nprice-now">R$ 199</span><span class="nprice-old">R$ 349</span><span class="nprice-off">-43%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">👠</div><div class="ncard-body"><div class="ncard-cat">Salto</div><div class="ncard-title">Scarpin salto 7cm bico fino elegante festa escritório</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 199</span><span class="nprice-off">-60%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-45%</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">🧦</div><div class="ncard-body"><div class="ncard-cat">Acessório</div><div class="ncard-title">Kit 12 pares meias esportivas cano médio algodão</div><div class="ncard-pricing"><span class="nprice-now">R$ 49</span><span class="nprice-old">R$ 89</span><span class="nprice-off">-45%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">👟</div><div class="ncard-body"><div class="ncard-cat">Basquete</div><div class="ncard-title">Nike Air Force 1 branco masculino/feminino</div><div class="ncard-pricing"><span class="nprice-now">R$ 349</span><span class="nprice-old">R$ 599</span><span class="nprice-off">-42%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🥿</div><div class="ncard-body"><div class="ncard-cat">Conforto</div><div class="ncard-title">Crocs Classic unissex EVA original todas as cores</div><div class="ncard-pricing"><span class="nprice-now">R$ 149</span><span class="nprice-old">R$ 249</span><span class="nprice-off">-40%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 🎮 GAMES ==================== -->
+<div id="games" class="page" data-niche="games">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>🎮 Games</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">🎮 Games & Consoles</div><h1>Level up nas suas<br>compras de games</h1>
+    <p>Consoles, jogos, acessórios e periféricos gamer. Economize e jogue mais.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">670</div><div class="niche-meta-label">Produtos em oferta</div></div><div><div class="niche-meta-num">até 50%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Plataforma:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">PlayStation</button><button class="filter-btn">Xbox</button><button class="filter-btn">Nintendo</button><button class="filter-btn">PC</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>🎮 Games em oferta</h2><span class="products-count">670 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🎮</div><div class="ncard-body"><div class="ncard-cat">PlayStation</div><div class="ncard-title">God of War Ragnarök PS4/PS5 edição standard</div><div class="ncard-pricing"><span class="nprice-now">R$ 149</span><span class="nprice-old">R$ 299</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">🕹️</div><div class="ncard-body"><div class="ncard-cat">Controle</div><div class="ncard-title">Xbox Series X/S sem fio bateria recarregável</div><div class="ncard-pricing"><span class="nprice-now">R$ 349</span><span class="nprice-old">R$ 449</span><span class="nprice-off">-22%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-45%</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🎧</div><div class="ncard-body"><div class="ncard-cat">Headset</div><div class="ncard-title">HyperX Cloud II USB 7.1 microfone destacável</div><div class="ncard-pricing"><span class="nprice-now">R$ 299</span><span class="nprice-old">R$ 549</span><span class="nprice-off">-45%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">🖱️</div><div class="ncard-body"><div class="ncard-cat">Mouse</div><div class="ncard-title">Logitech G502 Hero 25600 DPI 11 botões programáveis</div><div class="ncard-pricing"><span class="nprice-now">R$ 199</span><span class="nprice-old">R$ 349</span><span class="nprice-off">-43%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🎮</div><div class="ncard-body"><div class="ncard-cat">Nintendo</div><div class="ncard-title">Switch OLED 64GB branco + jogo Zelda</div><div class="ncard-pricing"><span class="nprice-now">R$ 2.299</span><span class="nprice-old">R$ 2.999</span><span class="nprice-off">-23%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-55%</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">⌨️</div><div class="ncard-body"><div class="ncard-cat">Teclado</div><div class="ncard-title">Teclado mecânico TKL RGB switches azuis</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 199</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🎮</div><div class="ncard-body"><div class="ncard-cat">Xbox</div><div class="ncard-title">Forza Horizon 5 Xbox One/Series código digital</div><div class="ncard-pricing"><span class="nprice-now">R$ 99</span><span class="nprice-old">R$ 249</span><span class="nprice-off">-60%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🕹️</div><div class="ncard-body"><div class="ncard-cat">Cadeira</div><div class="ncard-title">Cadeira gamer reclinável 180° apoio lombar e cabeça</div><div class="ncard-pricing"><span class="nprice-now">R$ 599</span><span class="nprice-old">R$ 1.199</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 📺 ELETRODOMÉSTICOS ==================== -->
+<div id="eletro" class="page" data-niche="eletro">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>📺 Eletrodomésticos</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">📺 Eletrodomésticos</div><h1>Renove sua casa com<br>eletros em oferta</h1>
+    <p>TVs, geladeiras, máquinas de lavar, ar-condicionado com os melhores preços do mercado.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">430</div><div class="niche-meta-label">Produtos em oferta</div></div><div><div class="niche-meta-num">até 40%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Tipo:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Smart TVs</button><button class="filter-btn">Geladeiras</button><button class="filter-btn">Lavadoras</button><button class="filter-btn">Ar Cond.</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>📺 Eletrodomésticos em oferta</h2><span class="products-count">430 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">📺</div><div class="ncard-body"><div class="ncard-cat">Smart TV</div><div class="ncard-title">LG 50" 4K UHD HDR10 WebOS 2024</div><div class="ncard-pricing"><span class="nprice-now">R$ 1.899</span><span class="nprice-old">R$ 2.799</span><span class="nprice-off">-32%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">❄️</div><div class="ncard-body"><div class="ncard-cat">Ar Condicionado</div><div class="ncard-title">Split Inverter 12000 BTU 220V Wi-Fi</div><div class="ncard-pricing"><span class="nprice-now">R$ 1.699</span><span class="nprice-old">R$ 2.499</span><span class="nprice-off">-32%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-35%</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🧊</div><div class="ncard-body"><div class="ncard-cat">Geladeira</div><div class="ncard-title">Brastemp Duplex Frost Free 375L Inverse Branca</div><div class="ncard-pricing"><span class="nprice-now">R$ 2.499</span><span class="nprice-old">R$ 3.849</span><span class="nprice-off">-35%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">👕</div><div class="ncard-body"><div class="ncard-cat">Lavadora</div><div class="ncard-title">Electrolux 11kg Essential Care Wi-Fi</div><div class="ncard-pricing"><span class="nprice-now">R$ 1.799</span><span class="nprice-old">R$ 2.599</span><span class="nprice-off">-31%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🍕</div><div class="ncard-body"><div class="ncard-cat">Air Fryer</div><div class="ncard-title">Philips Walita 4.1L digital 1400W 220V</div><div class="ncard-pricing"><span class="nprice-now">R$ 399</span><span class="nprice-old">R$ 649</span><span class="nprice-off">-39%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-28%</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">☕</div><div class="ncard-body"><div class="ncard-cat">Café</div><div class="ncard-title">Nespresso Vertuo Next 127V cápsulas incluídas</div><div class="ncard-pricing"><span class="nprice-now">R$ 449</span><span class="nprice-old">R$ 629</span><span class="nprice-off">-29%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">📻</div><div class="ncard-body"><div class="ncard-cat">Som</div><div class="ncard-title">JBL Charge 5 Bluetooth 40W IPX7 powerbank</div><div class="ncard-pricing"><span class="nprice-now">R$ 799</span><span class="nprice-old">R$ 1.099</span><span class="nprice-off">-27%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🌀</div><div class="ncard-body"><div class="ncard-cat">Ventilação</div><div class="ncard-title">Ventilador Dyson V1 sem pás Wi-Fi 10 velocidades</div><div class="ncard-pricing"><span class="nprice-now">R$ 2.199</span><span class="nprice-old">R$ 3.499</span><span class="nprice-off">-37%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 🏋️ ESPORTES ==================== -->
+<div id="esportes" class="page" data-niche="esportes">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>🏋️ Esportes</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">🏋️ Esportes & Fitness</div><h1>Treine mais,<br>gaste menos</h1>
+    <p>Equipamentos, roupas esportivas, suplementos e acessórios para todos os esportes.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">960</div><div class="niche-meta-label">Produtos em oferta</div></div><div><div class="niche-meta-num">até 60%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Esporte:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Musculação</button><button class="filter-btn">Corrida</button><button class="filter-btn">Natação</button><button class="filter-btn">Futebol</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>🏋️ Esportes em oferta</h2><span class="products-count">960 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🏋️</div><div class="ncard-body"><div class="ncard-cat">Musculação</div><div class="ncard-title">Kit halteres 2x5kg borracha hexagonal antiderrapante</div><div class="ncard-pricing"><span class="nprice-now">R$ 129</span><span class="nprice-old">R$ 289</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">⌚</div><div class="ncard-body"><div class="ncard-cat">GPS</div><div class="ncard-title">Garmin Forerunner 165 GPS corrida saúde avançada</div><div class="ncard-pricing"><span class="nprice-now">R$ 1.299</span><span class="nprice-old">R$ 1.899</span><span class="nprice-off">-32%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-45%</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🧘</div><div class="ncard-body"><div class="ncard-cat">Yoga</div><div class="ncard-title">Kit yoga tapete 6mm + blocos + alça + bolsa</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 145</span><span class="nprice-off">-46%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">🚴</div><div class="ncard-body"><div class="ncard-cat">Ciclismo</div><div class="ncard-title">Capacete MTB road bike ventilação LED traseiro</div><div class="ncard-pricing"><span class="nprice-now">R$ 119</span><span class="nprice-old">R$ 249</span><span class="nprice-off">-52%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">⚽</div><div class="ncard-body"><div class="ncard-cat">Futebol</div><div class="ncard-title">Chuteira society Nike Vapor 15 Club grama sintética</div><div class="ncard-pricing"><span class="nprice-now">R$ 149</span><span class="nprice-old">R$ 299</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-40%</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🏊</div><div class="ncard-body"><div class="ncard-cat">Natação</div><div class="ncard-title">Óculos natação Speedo antiembaçante proteção UV</div><div class="ncard-pricing"><span class="nprice-now">R$ 49</span><span class="nprice-old">R$ 82</span><span class="nprice-off">-40%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🧗</div><div class="ncard-body"><div class="ncard-cat">Academia</div><div class="ncard-title">Bicicleta ergométrica magnética 8 níveis LCD</div><div class="ncard-pricing"><span class="nprice-now">R$ 899</span><span class="nprice-old">R$ 1.599</span><span class="nprice-off">-44%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🥊</div><div class="ncard-body"><div class="ncard-cat">Boxe</div><div class="ncard-title">Luvas boxe muay thai couro PU 12oz</div><div class="ncard-pricing"><span class="nprice-now">R$ 69</span><span class="nprice-old">R$ 139</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 💄 BELEZA ==================== -->
+<div id="beleza" class="page" data-niche="beleza">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>💄 Beleza</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">💄 Beleza & Cuidados</div><h1>Sua rotina de beleza<br>com muito desconto</h1>
+    <p>Maquiagem, skincare, cabelo, perfumes e muito mais. Beleza acessível para todos.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">2.100</div><div class="niche-meta-label">Produtos em oferta</div></div><div><div class="niche-meta-num">até 70%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Categoria:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Maquiagem</button><button class="filter-btn">Skincare</button><button class="filter-btn">Cabelo</button><button class="filter-btn">Perfumes</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>💄 Beleza em oferta</h2><span class="products-count">2.100 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">💄</div><div class="ncard-body"><div class="ncard-cat">Maquiagem</div><div class="ncard-title">Kit maquiagem 12 peças paleta sombra base corretivo</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 199</span><span class="nprice-off">-60%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🌸</div><div class="ncard-body"><div class="ncard-cat">Skincare</div><div class="ncard-title">La Roche-Posay hidratante + protetor solar FPS60</div><div class="ncard-pricing"><span class="nprice-now">R$ 139</span><span class="nprice-old">R$ 229</span><span class="nprice-off">-39%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-55%</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">💅</div><div class="ncard-body"><div class="ncard-cat">Unhas</div><div class="ncard-title">Kit gel UV 60 cores esmalte semipermanente led</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 199</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">🌹</div><div class="ncard-body"><div class="ncard-cat">Perfume</div><div class="ncard-title">Lattafa Ameer Al Oud 100ml EdP árabe duradouro</div><div class="ncard-pricing"><span class="nprice-now">R$ 99</span><span class="nprice-old">R$ 249</span><span class="nprice-off">-60%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">💇</div><div class="ncard-body"><div class="ncard-cat">Cabelo</div><div class="ncard-title">Chapinha profissional titânio 230°C íon negativo</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 219</span><span class="nprice-off">-59%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-40%</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🧴</div><div class="ncard-body"><div class="ncard-cat">Skincare</div><div class="ncard-title">Vitamina C sérum 20% hialuronato clareador anti-idade</div><div class="ncard-pricing"><span class="nprice-now">R$ 49</span><span class="nprice-old">R$ 82</span><span class="nprice-off">-40%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🪥</div><div class="ncard-body"><div class="ncard-cat">Oral</div><div class="ncard-title">Oral-B IO Series 3 escova elétrica recarga magnética</div><div class="ncard-pricing"><span class="nprice-now">R$ 199</span><span class="nprice-old">R$ 349</span><span class="nprice-off">-43%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🪞</div><div class="ncard-body"><div class="ncard-cat">Espelho</div><div class="ncard-title">Espelho LED maquiagem 10x aumento USB recarregável</div><div class="ncard-pricing"><span class="nprice-now">R$ 59</span><span class="nprice-old">R$ 129</span><span class="nprice-off">-54%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 🧸 BRINQUEDOS ==================== -->
+<div id="brinquedos" class="page" data-niche="brinquedos">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>🧸 Brinquedos</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">🧸 Brinquedos & Diversão</div><h1>Alegria para a criançada<br>sem pesar no bolso</h1>
+    <p>Bonecas, carrinhos, LEGO, educativos e muito mais. Diversão garantida!</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">780</div><div class="niche-meta-label">Produtos em oferta</div></div><div><div class="niche-meta-num">até 65%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Tipo:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Educativos</button><button class="filter-btn">Bonecas</button><button class="filter-btn">Carrinhos</button><button class="filter-btn">LEGO</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>🧸 Brinquedos em oferta</h2><span class="products-count">780 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🧸</div><div class="ncard-body"><div class="ncard-cat">Pelúcia</div><div class="ncard-title">Urso de pelúcia gigante 90cm macio antialérgico</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 199</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🧩</div><div class="ncard-body"><div class="ncard-cat">LEGO</div><div class="ncard-title">LEGO Classic 10698 790 peças coloridas criativas</div><div class="ncard-pricing"><span class="nprice-now">R$ 299</span><span class="nprice-old">R$ 499</span><span class="nprice-off">-40%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-55%</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🚂</div><div class="ncard-body"><div class="ncard-cat">Veículos</div><div class="ncard-title">Kit ferrovia trenzinho elétrico 98 peças trilhos</div><div class="ncard-pricing"><span class="nprice-now">R$ 69</span><span class="nprice-old">R$ 154</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🪆</div><div class="ncard-body"><div class="ncard-cat">Bonecas</div><div class="ncard-title">Barbie Fashionista articulada + 3 looks + acessórios</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 149</span><span class="nprice-off">-40%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">🚗</div><div class="ncard-body"><div class="ncard-cat">RC</div><div class="ncard-title">Carro RC 4x4 off-road 1:16 velocidade 45km/h</div><div class="ncard-pricing"><span class="nprice-now">R$ 149</span><span class="nprice-old">R$ 349</span><span class="nprice-off">-57%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-45%</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🎪</div><div class="ncard-body"><div class="ncard-cat">Playground</div><div class="ncard-title">Piscina de bolinhas infantil dobrável 200 bolinhas</div><div class="ncard-pricing"><span class="nprice-now">R$ 99</span><span class="nprice-old">R$ 180</span><span class="nprice-off">-45%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🎯</div><div class="ncard-body"><div class="ncard-cat">Jogos</div><div class="ncard-title">Jenga Original Hasbro blocos madeira equilíbrio</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 139</span><span class="nprice-off">-43%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">🛴</div><div class="ncard-body"><div class="ncard-cat">Outdoor</div><div class="ncard-title">Patinete infantil 3 rodas ajustável LED 3-8 anos</div><div class="ncard-pricing"><span class="nprice-now">R$ 129</span><span class="nprice-old">R$ 249</span><span class="nprice-off">-48%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 🐾 PET ==================== -->
+<div id="pet" class="page" data-niche="pet">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>🐾 Pet Shop</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">🐾 Pet Shop</div><h1>Seu pet merece o melhor<br>pelo menor preço</h1>
+    <p>Ração, brinquedos, camas, coleiras e tudo para cães, gatos e outros bichinhos.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">530</div><div class="niche-meta-label">Produtos em oferta</div></div><div><div class="niche-meta-num">até 50%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Animal:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Cães</button><button class="filter-btn">Gatos</button><button class="filter-btn">Pássaros</button><button class="filter-btn">Aquário</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>🐾 Pet Shop em oferta</h2><span class="products-count">530 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🐕</div><div class="ncard-body"><div class="ncard-cat">Cães</div><div class="ncard-title">Ração Golden Retriever adulto 15kg frango e arroz</div><div class="ncard-pricing"><span class="nprice-now">R$ 189</span><span class="nprice-old">R$ 299</span><span class="nprice-off">-37%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🐱</div><div class="ncard-body"><div class="ncard-cat">Gatos</div><div class="ncard-title">Arranhador torre sisaço 160cm 5 andares cama hammock</div><div class="ncard-pricing"><span class="nprice-now">R$ 199</span><span class="nprice-old">R$ 399</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-45%</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🦴</div><div class="ncard-body"><div class="ncard-cat">Brinquedos</div><div class="ncard-title">Kit 20 brinquedos interativos para cães</div><div class="ncard-pricing"><span class="nprice-now">R$ 49</span><span class="nprice-old">R$ 89</span><span class="nprice-off">-45%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🛏️</div><div class="ncard-body"><div class="ncard-cat">Camas</div><div class="ncard-title">Cama pet ortopédica lavável visco memória M/G</div><div class="ncard-pricing"><span class="nprice-now">R$ 129</span><span class="nprice-old">R$ 259</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🚿</div><div class="ncard-body"><div class="ncard-cat">Banho</div><div class="ncard-title">Kit shampoo condicionador colônia pet duradoura</div><div class="ncard-pricing"><span class="nprice-now">R$ 39</span><span class="nprice-old">R$ 79</span><span class="nprice-off">-51%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-38%</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🐾</div><div class="ncard-body"><div class="ncard-cat">Proteção</div><div class="ncard-title">Coleira anti-pulgas 8 meses de proteção cão/gato</div><div class="ncard-pricing"><span class="nprice-now">R$ 49</span><span class="nprice-old">R$ 79</span><span class="nprice-off">-38%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">🏡</div><div class="ncard-body"><div class="ncard-cat">Casinhas</div><div class="ncard-title">Casinha plástica impermeável raça pequena/média</div><div class="ncard-pricing"><span class="nprice-now">R$ 149</span><span class="nprice-old">R$ 279</span><span class="nprice-off">-47%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🐟</div><div class="ncard-body"><div class="ncard-cat">Aquário</div><div class="ncard-title">Aquário completo 20L filtro LED termostato bomba</div><div class="ncard-pricing"><span class="nprice-now">R$ 189</span><span class="nprice-old">R$ 349</span><span class="nprice-off">-46%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 🌿 SAÚDE ==================== -->
+<div id="saude" class="page" data-niche="saude">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>🌿 Saúde</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">🌿 Saúde & Bem-estar</div><h1>Cuide da saúde<br>sem gastar muito</h1>
+    <p>Suplementos, equipamentos médicos, vitaminas e produtos para bem-estar.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">890</div><div class="niche-meta-label">Produtos em oferta</div></div><div><div class="niche-meta-num">até 55%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Tipo:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Suplementos</button><button class="filter-btn">Equipamentos</button><button class="filter-btn">Vitaminas</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>🌿 Saúde em oferta</h2><span class="products-count">890 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">💪</div><div class="ncard-body"><div class="ncard-cat">Suplemento</div><div class="ncard-title">Whey Protein Optimum Nutrition Gold 907g</div><div class="ncard-pricing"><span class="nprice-now">R$ 149</span><span class="nprice-old">R$ 299</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">🩺</div><div class="ncard-body"><div class="ncard-cat">Equipamento</div><div class="ncard-title">Medidor de pressão digital de braço automático</div><div class="ncard-pricing"><span class="nprice-now">R$ 119</span><span class="nprice-old">R$ 249</span><span class="nprice-off">-52%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-45%</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🌿</div><div class="ncard-body"><div class="ncard-cat">Vitaminas</div><div class="ncard-title">Kit D3 + K2 + Magnésio 3 potes 90 caps cada</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 163</span><span class="nprice-off">-45%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">🧘</div><div class="ncard-body"><div class="ncard-cat">Massagem</div><div class="ncard-title">Pistola percussão 6 velocidades 6 cabeças silent</div><div class="ncard-pricing"><span class="nprice-now">R$ 149</span><span class="nprice-old">R$ 349</span><span class="nprice-off">-57%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">⚖️</div><div class="ncard-body"><div class="ncard-cat">Balança</div><div class="ncard-title">Balança smart Wi-Fi 13 métricas IMC massa muscular</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 169</span><span class="nprice-off">-53%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-40%</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">😴</div><div class="ncard-body"><div class="ncard-cat">Sono</div><div class="ncard-title">Melatonina 10mg 120 comprimidos regulação circadiana</div><div class="ncard-pricing"><span class="nprice-now">R$ 39</span><span class="nprice-old">R$ 65</span><span class="nprice-off">-40%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🌡️</div><div class="ncard-body"><div class="ncard-cat">Diagnóstico</div><div class="ncard-title">Oxímetro LED SpO2 frequência cardíaca portátil</div><div class="ncard-pricing"><span class="nprice-now">R$ 49</span><span class="nprice-old">R$ 99</span><span class="nprice-off">-51%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🏃</div><div class="ncard-body"><div class="ncard-cat">Creatina</div><div class="ncard-title">Creatina monohidratada 500g micronizada pura</div><div class="ncard-pricing"><span class="nprice-now">R$ 59</span><span class="nprice-old">R$ 99</span><span class="nprice-off">-40%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 🚗 AUTOMOTIVO ==================== -->
+<div id="auto" class="page" data-niche="auto">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>🚗 Automotivo</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">🚗 Automotivo</div><h1>Seu carro merece<br>os melhores produtos</h1>
+    <p>Acessórios, eletrônicos, peças, manutenção e detailing para o seu veículo.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">340</div><div class="niche-meta-label">Produtos em oferta</div></div><div><div class="niche-meta-num">até 55%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Tipo:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Acessórios</button><button class="filter-btn">Eletrônicos</button><button class="filter-btn">Limpeza</button><button class="filter-btn">Segurança</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>🚗 Automotivo em oferta</h2><span class="products-count">340 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🚗</div><div class="ncard-body"><div class="ncard-cat">Suporte</div><div class="ncard-title">Suporte MagSafe carregador sem fio 15W dashboard</div><div class="ncard-pricing"><span class="nprice-now">R$ 59</span><span class="nprice-old">R$ 129</span><span class="nprice-off">-54%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">📷</div><div class="ncard-body"><div class="ncard-cat">Câmera Ré</div><div class="ncard-title">Câmera ré HD 170° visão noturna colorida</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 189</span><span class="nprice-off">-53%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-50%</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🧴</div><div class="ncard-body"><div class="ncard-cat">Detailing</div><div class="ncard-title">Kit limpeza carro 10 itens polidor enceradeira</div><div class="ncard-pricing"><span class="nprice-now">R$ 59</span><span class="nprice-old">R$ 119</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">📡</div><div class="ncard-body"><div class="ncard-cat">Rastreador</div><div class="ncard-title">GPS veicular mini 4G bateria 30 dias</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 199</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🔋</div><div class="ncard-body"><div class="ncard-cat">Carregador</div><div class="ncard-title">Carregador carro USB-C + USB-A 65W PD QC 4.0</div><div class="ncard-pricing"><span class="nprice-now">R$ 39</span><span class="nprice-old">R$ 79</span><span class="nprice-off">-51%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-45%</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🎵</div><div class="ncard-body"><div class="ncard-cat">Som</div><div class="ncard-title">Transmissor FM Bluetooth 5.3 mp3 carregador duplo</div><div class="ncard-pricing"><span class="nprice-now">R$ 49</span><span class="nprice-old">R$ 89</span><span class="nprice-off">-45%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🌂</div><div class="ncard-body"><div class="ncard-cat">Proteção</div><div class="ncard-title">Capa cobrir carro UV sol chuva tamanhos P/M/G</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 159</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🛞</div><div class="ncard-body"><div class="ncard-cat">Calibrador</div><div class="ncard-title">Calibrador pneu digital compressor 12V 150PSI</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 169</span><span class="nprice-off">-53%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 🔧 FERRAMENTAS ==================== -->
+<div id="ferramentas" class="page" data-niche="ferramentas">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>🔧 Ferramentas</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">🔧 Ferramentas</div><h1>Ferramentas profissionais<br>para todos os bolsos</h1>
+    <p>Ferramentas elétricas, manuais, kits e equipamentos de construção civil.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">420</div><div class="niche-meta-label">Produtos em oferta</div></div><div><div class="niche-meta-num">até 50%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Tipo:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Elétricas</button><button class="filter-btn">Manuais</button><button class="filter-btn">Kits</button><button class="filter-btn">EPI</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>🔧 Ferramentas em oferta</h2><span class="products-count">420 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🔨</div><div class="ncard-body"><div class="ncard-cat">Elétrica</div><div class="ncard-title">Bosch GSR 120-Li 12V parafusadeira 2 baterias</div><div class="ncard-pricing"><span class="nprice-now">R$ 349</span><span class="nprice-old">R$ 599</span><span class="nprice-off">-42%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">⚡</div><div class="ncard-body"><div class="ncard-cat">Serra</div><div class="ncard-title">Serra circular Makita 185mm 1050W lâmina TCT</div><div class="ncard-pricing"><span class="nprice-now">R$ 699</span><span class="nprice-old">R$ 1.199</span><span class="nprice-off">-42%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-50%</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🔧</div><div class="ncard-body"><div class="ncard-cat">Kit</div><div class="ncard-title">Kit 186 peças ferramentas chave parafuso maleta</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 179</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">📏</div><div class="ncard-body"><div class="ncard-cat">Medição</div><div class="ncard-title">Trena laser 50m nível digital bluetooth IP54</div><div class="ncard-pricing"><span class="nprice-now">R$ 129</span><span class="nprice-old">R$ 289</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🪚</div><div class="ncard-body"><div class="ncard-cat">Manual</div><div class="ncard-title">Chaves combinadas 20 peças cromo vanádio 8-32mm</div><div class="ncard-pricing"><span class="nprice-now">R$ 59</span><span class="nprice-old">R$ 119</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-38%</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🔩</div><div class="ncard-body"><div class="ncard-cat">Lixadeira</div><div class="ncard-title">Lixadeira orbital Black+Decker 150W 5 velocidades</div><div class="ncard-pricing"><span class="nprice-now">R$ 219</span><span class="nprice-old">R$ 354</span><span class="nprice-off">-38%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🪣</div><div class="ncard-body"><div class="ncard-cat">Pintura</div><div class="ncard-title">Kit pintura compressor pistola rolo bandeja 3L</div><div class="ncard-pricing"><span class="nprice-now">R$ 199</span><span class="nprice-old">R$ 399</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🦺</div><div class="ncard-body"><div class="ncard-cat">EPI</div><div class="ncard-title">Óculos proteção + protetor auricular + luvas kit</div><div class="ncard-pricing"><span class="nprice-now">R$ 29</span><span class="nprice-old">R$ 59</span><span class="nprice-off">-51%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 📚 LIVROS ==================== -->
+<div id="livros" class="page" data-niche="livros">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>📚 Livros</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">📚 Livros & Cultura</div><h1>Conhecimento acessível<br>para todos</h1>
+    <p>Best-sellers, clássicos, mangás, HQs, livros técnicos e didáticos.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">1.500</div><div class="niche-meta-label">Títulos em oferta</div></div><div><div class="niche-meta-num">até 60%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Gênero:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Ficção</button><button class="filter-btn">Negócios</button><button class="filter-btn">Técnico</button><button class="filter-btn">Mangá</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>📚 Livros em oferta</h2><span class="products-count">1.500 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">📖</div><div class="ncard-body"><div class="ncard-cat">Negócios</div><div class="ncard-title">Pai Rico Pai Pobre — Kiyosaki edição atualizada</div><div class="ncard-pricing"><span class="nprice-now">R$ 29</span><span class="nprice-old">R$ 59</span><span class="nprice-off">-51%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">📚</div><div class="ncard-body"><div class="ncard-cat">Ficção</div><div class="ncard-title">Harry Potter coleção completa 7 volumes box especial</div><div class="ncard-pricing"><span class="nprice-now">R$ 189</span><span class="nprice-old">R$ 399</span><span class="nprice-off">-53%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-55%</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">📕</div><div class="ncard-body"><div class="ncard-cat">Mangá</div><div class="ncard-title">One Piece volumes 1-10 box coleção Eiichiro Oda</div><div class="ncard-pricing"><span class="nprice-now">R$ 149</span><span class="nprice-old">R$ 330</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">💻</div><div class="ncard-body"><div class="ncard-cat">Tecnologia</div><div class="ncard-title">Clean Code — Robert C. Martin programação</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 159</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🧠</div><div class="ncard-body"><div class="ncard-cat">Psicologia</div><div class="ncard-title">O Poder do Hábito — Charles Duhigg</div><div class="ncard-pricing"><span class="nprice-now">R$ 39</span><span class="nprice-old">R$ 79</span><span class="nprice-off">-51%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-40%</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🎒</div><div class="ncard-body"><div class="ncard-cat">Didático</div><div class="ncard-title">Kit didático vestibular 2025 todas as matérias</div><div class="ncard-pricing"><span class="nprice-now">R$ 129</span><span class="nprice-old">R$ 215</span><span class="nprice-off">-40%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🌍</div><div class="ncard-body"><div class="ncard-cat">Autoajuda</div><div class="ncard-title">O Sutil Arte de Ligar o F*da-se — Mark Manson</div><div class="ncard-pricing"><span class="nprice-now">R$ 29</span><span class="nprice-old">R$ 59</span><span class="nprice-off">-51%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">📱</div><div class="ncard-body"><div class="ncard-cat">E-reader</div><div class="ncard-title">Kindle 11ª geração 16GB luz embutida sem anúncios</div><div class="ncard-pricing"><span class="nprice-now">R$ 399</span><span class="nprice-old">R$ 599</span><span class="nprice-off">-33%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 🎨 ARTE ==================== -->
+<div id="arte" class="page" data-niche="arte">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>🎨 Arte & Hobby</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">🎨 Arte & Hobbies</div><h1>Desperte sua<br>criatividade</h1>
+    <p>Materiais de arte, música, fotografia e colecionáveis para todos os gostos.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">310</div><div class="niche-meta-label">Produtos em oferta</div></div><div><div class="niche-meta-num">até 60%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Hobby:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Pintura</button><button class="filter-btn">Música</button><button class="filter-btn">Fotografia</button><button class="filter-btn">Costura</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>🎨 Arte & Hobby em oferta</h2><span class="products-count">310 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🎨</div><div class="ncard-body"><div class="ncard-cat">Pintura</div><div class="ncard-title">Kit tinta acrílica 24 cores pincéis tela cavalete</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 199</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🎸</div><div class="ncard-body"><div class="ncard-cat">Música</div><div class="ncard-title">Violão Yamaha F310 folk + capa + afinador</div><div class="ncard-pricing"><span class="nprice-now">R$ 599</span><span class="nprice-old">R$ 999</span><span class="nprice-off">-40%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-50%</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">📸</div><div class="ncard-body"><div class="ncard-cat">Foto</div><div class="ncard-title">Tripé câmera alumínio 165cm cabeça panorâmica</div><div class="ncard-pricing"><span class="nprice-now">R$ 99</span><span class="nprice-old">R$ 199</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🧵</div><div class="ncard-body"><div class="ncard-cat">Costura</div><div class="ncard-title">Máquina costura 12 pontos portátil + acessórios</div><div class="ncard-pricing"><span class="nprice-now">R$ 149</span><span class="nprice-old">R$ 329</span><span class="nprice-off">-55%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🏺</div><div class="ncard-body"><div class="ncard-cat">Argila</div><div class="ncard-title">Kit argila polimérica 24 cores Fimo modelagem</div><div class="ncard-pricing"><span class="nprice-now">R$ 69</span><span class="nprice-old">R$ 149</span><span class="nprice-off">-54%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-45%</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🎹</div><div class="ncard-body"><div class="ncard-cat">Música</div><div class="ncard-title">Casio CT-S300 teclado 61 teclas iniciante</div><div class="ncard-pricing"><span class="nprice-now">R$ 549</span><span class="nprice-old">R$ 999</span><span class="nprice-off">-45%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🪡</div><div class="ncard-body"><div class="ncard-cat">Crochê</div><div class="ncard-title">Kit agulhas 9 tamanhos + 20 novelos lã multicolor</div><div class="ncard-pricing"><span class="nprice-now">R$ 59</span><span class="nprice-old">R$ 109</span><span class="nprice-off">-46%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ali">AliExpress</span><div class="ncard-img">🎭</div><div class="ncard-body"><div class="ncard-cat">Resina</div><div class="ncard-title">Resina epóxi cristal 1kg + pigmentos 30 cores</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 189</span><span class="nprice-off">-53%</span></div><a href="#" class="ncard-btn">Ver no AliExpress →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<!-- ==================== 👶 BEBÊ ==================== -->
+<div id="bebe" class="page" data-niche="bebe">
+  <div class="niche-breadcrumb"><a onclick="showPage('home')">Início</a> / <span>👶 Bebê</span></div>
+  <div class="niche-hero"><div class="niche-hero-bg"></div><div class="niche-hero-content">
+    <div class="niche-tag">👶 Bebê & Maternidade</div><h1>Tudo para o seu bebê<br>com segurança e economia</h1>
+    <p>Enxoval, berços, carrinhos e acessórios para bebês e gestantes.</p>
+    <div class="niche-meta"><div><div class="niche-meta-num">640</div><div class="niche-meta-label">Produtos em oferta</div></div><div><div class="niche-meta-num">até 55%</div><div class="niche-meta-label">Desconto máximo</div></div></div>
+  </div></div>
+  <div class="filters-bar"><span class="filter-label">Tipo:</span><div class="filter-group"><button class="filter-btn active">Todos</button><button class="filter-btn">Enxoval</button><button class="filter-btn">Segurança</button><button class="filter-btn">Carrinho</button><button class="filter-btn">Alimentação</button></div><select class="sort-select"><option>Maior desconto</option></select></div>
+  <div class="products-wrap"><div class="products-heading"><h2>👶 Bebê em oferta</h2><span class="products-count">640 resultados</span></div>
+  <div class="ngrid">
+    <div class="ncard"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🍼</div><div class="ncard-body"><div class="ncard-cat">Alimentação</div><div class="ncard-title">Mamadeiras Avent Natural anticólica kit 4 unidades</div><div class="ncard-pricing"><span class="nprice-now">R$ 89</span><span class="nprice-old">R$ 179</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.06s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🛏️</div><div class="ncard-body"><div class="ncard-cat">Dormitório</div><div class="ncard-title">Berço portátil dobrável moisés chicco next2me</div><div class="ncard-pricing"><span class="nprice-now">R$ 699</span><span class="nprice-old">R$ 1.299</span><span class="nprice-off">-46%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.12s"><div class="ncard-badges"><span class="nbadge nb-sale">-50%</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">👶</div><div class="ncard-body"><div class="ncard-cat">Enxoval</div><div class="ncard-title">Kit body bebê 10 peças algodão 0-3 meses unissex</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 159</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+    <div class="ncard" style="animation-delay:.18s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-ml">Mercado L.</span><div class="ncard-img">🚗</div><div class="ncard-body"><div class="ncard-cat">Segurança</div><div class="ncard-title">Cadeirinha carro bebê conforto 0-13kg Chicco</div><div class="ncard-pricing"><span class="nprice-now">R$ 399</span><span class="nprice-old">R$ 699</span><span class="nprice-off">-43%</span></div><a href="#" class="ncard-btn">Ver no M. Livre →</a></div></div>
+    <div class="ncard" style="animation-delay:.24s"><div class="ncard-badges"><span class="nbadge nb-hot">Hot</span></div><span class="ncard-store ns-shopee">Shopee</span><div class="ncard-img">🎠</div><div class="ncard-body"><div class="ncard-cat">Brinquedo</div><div class="ncard-title">Móbile musical projetor estrelas sensor de choro</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 159</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Shopee →</a></div></div>
+    <div class="ncard" style="animation-delay:.30s"><div class="ncard-badges"><span class="nbadge nb-sale">-45%</span></div><span class="ncard-store ns-amazon">Amazon</span><div class="ncard-img">🧴</div><div class="ncard-body"><div class="ncard-cat">Higiene</div><div class="ncard-title">Kit Johnson's Baby completo 6 produtos higiene</div><div class="ncard-pricing"><span class="nprice-now">R$ 79</span><span class="nprice-old">R$ 145</span><span class="nprice-off">-46%</span></div><a href="#" class="ncard-btn">Ver na Amazon →</a></div></div>
+    <div class="ncard" style="animation-delay:.36s"><div class="ncard-badges"><span class="nbadge nb-best">Top</span></div><span class="ncard-store ns-magalu">Magalu</span><div class="ncard-img">🛁</div><div class="ncard-body"><div class="ncard-cat">Banho</div><div class="ncard-title">Banheira bebê suporte ajustável 0-2 anos ergonômica</div><div class="ncard-pricing"><span class="nprice-now">R$ 129</span><span class="nprice-old">R$ 229</span><span class="nprice-off">-44%</span></div><a href="#" class="ncard-btn">Ver na Magalu →</a></div></div>
+    <div class="ncard" style="animation-delay:.42s"><div class="ncard-badges"><span class="nbadge nb-new">Novo</span></div><span class="ncard-store ns-temu">Temu</span><div class="ncard-img">🍽️</div><div class="ncard-body"><div class="ncard-cat">Alimentação</div><div class="ncard-title">Cadeira alimentação portátil booster mesa dobrável</div><div class="ncard-pricing"><span class="nprice-now">R$ 99</span><span class="nprice-old">R$ 199</span><span class="nprice-off">-50%</span></div><a href="#" class="ncard-btn">Ver na Temu →</a></div></div>
+  </div></div>
+  <footer><div class="footer-logo">Promo<span>Hub</span></div><div class="footer-disclaimer">⚠️ Links de afiliados. Comissão sem custo extra para você.</div></footer>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const t = document.getElementById(id);
+  if (t) { t.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); if(id==='central'){try{init();}catch(e){}} }
+  // update header nav active state
+  document.querySelectorAll('.header-nav a').forEach(a => a.classList.remove('active'));
+}
+
+// filter buttons
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('filter-btn')) {
+    const g = e.target.closest('.filter-group');
+    if (g) { g.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); }
+  }
+});
+
+// store pills home
+document.querySelectorAll('.store-pill').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('.store-pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+  });
+});
+
+// niche chips home
+document.querySelectorAll('.niche-chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.niche-chip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+  });
+});
+</script>
+
+<!-- ==================== 📢 CENTRAL DE PUBLICAÇÃO ==================== -->
+<div id="central" class="page">
+<div class="main">
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-text">
+      <h1>Central de <em>Publicação</em></h1>
+      <p>Crie sua promoção, visualize o preview e envie para WhatsApp ou copie para o Instagram em segundos.</p>
+    </div>
+    <div class="stats-row">
+      <div class="stat-mini"><div class="stat-mini-num" id="totalPublished">0</div><div class="stat-mini-label">Publicadas</div></div>
+      <div class="stat-mini"><div class="stat-mini-num" id="totalWA">0</div><div class="stat-mini-label">Via WhatsApp</div></div>
+      <div class="stat-mini"><div class="stat-mini-num" id="totalIG">0</div><div class="stat-mini-label">Para Instagram</div></div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-card">
+    <div class="form-header">
+      <div class="form-header-icon">📢</div>
+      <div>
+        <h2>Nova Promoção</h2>
+        <p>Preencha os dados do produto para gerar o conteúdo</p>
+      </div>
+    </div>
+    <div class="form-body">
+
+      <!-- Emoji do produto -->
+      <div class="field" style="margin-bottom:1rem">
+        <label>Emoji do produto</label>
+        <div class="emoji-row" id="emojiRow">
+          <div class="emoji-btn active" data-emoji="🔥">🔥</div>
+          <div class="emoji-btn" data-emoji="📱">📱</div>
+          <div class="emoji-btn" data-emoji="💻">💻</div>
+          <div class="emoji-btn" data-emoji="👗">👗</div>
+          <div class="emoji-btn" data-emoji="👟">👟</div>
+          <div class="emoji-btn" data-emoji="🏠">🏠</div>
+          <div class="emoji-btn" data-emoji="🎮">🎮</div>
+          <div class="emoji-btn" data-emoji="📺">📺</div>
+          <div class="emoji-btn" data-emoji="💄">💄</div>
+          <div class="emoji-btn" data-emoji="🧸">🧸</div>
+          <div class="emoji-btn" data-emoji="🐾">🐾</div>
+          <div class="emoji-btn" data-emoji="🌿">🌿</div>
+          <div class="emoji-btn" data-emoji="🚗">🚗</div>
+          <div class="emoji-btn" data-emoji="🔧">🔧</div>
+          <div class="emoji-btn" data-emoji="📚">📚</div>
+          <div class="emoji-btn" data-emoji="🎨">🎨</div>
+          <div class="emoji-btn" data-emoji="👶">👶</div>
+          <div class="emoji-btn" data-emoji="🏋️">🏋️</div>
+          <div class="emoji-btn" data-emoji="✈️">✈️</div>
+          <div class="emoji-btn" data-emoji="⚡">⚡</div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <!-- Nome do produto -->
+        <div class="field full">
+          <label>Nome do produto</label>
+          <input type="text" id="prodName" placeholder="Ex: Samsung Galaxy A55 5G 256GB" maxlength="120" oninput="updatePreview()">
+          <div class="field-footer">
+            <span></span>
+            <span class="char-count" id="ccName">0/120</span>
+          </div>
+        </div>
+
+        <!-- Loja -->
+        <div class="field full">
+          <label>Loja parceira</label>
+          <div class="store-selector" id="storeSelector">
+            <div class="store-btn" data-store="Amazon" data-class="selected-amazon">📦 Amazon</div>
+            <div class="store-btn" data-store="Shopee" data-class="selected-shopee">🛍️ Shopee</div>
+            <div class="store-btn" data-store="Mercado Livre" data-class="selected-ml">🛒 Mercado Livre</div>
+            <div class="store-btn" data-store="Magalu" data-class="selected-magalu">💛 Magalu</div>
+            <div class="store-btn" data-store="Temu" data-class="selected-temu">🌐 Temu</div>
+            <div class="store-btn" data-store="AliExpress" data-class="selected-ali">✈️ AliExpress</div>
+          </div>
+        </div>
+
+        <!-- Preços -->
+        <div class="field full">
+          <label>Preços</label>
+          <div class="price-row">
+            <div class="field">
+              <input type="number" id="priceOld" placeholder="De R$" min="0" step="0.01" oninput="calcDiscount()">
+            </div>
+            <div class="field">
+              <input type="number" id="priceNew" placeholder="Por R$" min="0" step="0.01" oninput="calcDiscount()">
+            </div>
+            <div>
+              <div class="discount-badge" id="discountBadge">— <span>desconto</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Categoria -->
+        <div class="field">
+          <label>Categoria</label>
+          <select id="prodCat" onchange="updatePreview()">
+            <option value="">Selecione...</option>
+            <option>Celulares</option><option>Informática</option>
+            <option>Casa & Jardim</option><option>Moda</option>
+            <option>Calçados</option><option>Games</option>
+            <option>Eletrodomésticos</option><option>Esportes</option>
+            <option>Beleza</option><option>Brinquedos</option>
+            <option>Pet Shop</option><option>Saúde</option>
+            <option>Automotivo</option><option>Ferramentas</option>
+            <option>Livros</option><option>Arte & Hobby</option><option>Bebê</option>
+          </select>
+        </div>
+
+        <!-- Tom -->
+        <div class="field">
+          <label>Tom da mensagem</label>
+          <select id="msgTone" onchange="updatePreview()">
+            <option value="urgente">🔥 Urgente — Corre!</option>
+            <option value="casual">😎 Casual — Olha só</option>
+            <option value="formal">💼 Formal — Produto em oferta</option>
+            <option value="divertido">🎉 Divertido — Inacreditável!</option>
+          </select>
+        </div>
+
+        <!-- Descrição -->
+        <div class="field full">
+          <label>Descrição / Destaques</label>
+          <textarea id="prodDesc" placeholder="Ex: Câmera tripla 50MP, 5G, tela AMOLED 6.5&quot;" rows="3" maxlength="300" oninput="updatePreview()"></textarea>
+          <div class="field-footer">
+            <span></span>
+            <span class="char-count" id="ccDesc">0/300</span>
+          </div>
+        </div>
+
+        <!-- Link -->
+        <div class="field full">
+          <label>Link de afiliado</label>
+          <input type="url" id="prodLink" placeholder="https://amzn.to/xxxxxx" oninput="updatePreview()">
+        </div>
+
+        <!-- Hashtags -->
+        <div class="field full">
+          <label>Hashtags (Instagram)</label>
+          <div class="tags-row" id="tagsRow">
+            <div class="tag-toggle active" data-tag="#promoção">#promoção</div>
+            <div class="tag-toggle active" data-tag="#oferta">#oferta</div>
+            <div class="tag-toggle active" data-tag="#desconto">#desconto</div>
+            <div class="tag-toggle" data-tag="#compraonline">#compraonline</div>
+            <div class="tag-toggle" data-tag="#dicas">#dicas</div>
+            <div class="tag-toggle" data-tag="#amazon">#amazon</div>
+            <div class="tag-toggle" data-tag="#shopee">#shopee</div>
+            <div class="tag-toggle" data-tag="#fretegratis">#fretegratis</div>
+            <div class="tag-toggle" data-tag="#blackfriday">#blackfriday</div>
+            <div class="tag-toggle" data-tag="#economia">#economia</div>
+          </div>
+        </div>
+
+        <!-- Número WA -->
+        <div class="field full">
+          <label>Seu número WhatsApp (com DDD)</label>
+          <input type="tel" id="waNumber" placeholder="11999999999" maxlength="13">
+        </div>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="actions">
+        <button class="btn-wa" onclick="sendWhatsApp()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.11 1.522 5.843L.061 23.427l5.756-1.493A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.65-.523-5.148-1.427l-.37-.22-3.795.985.979-3.688-.242-.379A9.944 9.944 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          Enviar para WhatsApp
+        </button>
+
+        <button class="btn-ig" onclick="copyInstagram()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          Copiar para Instagram
+        </button>
+
+        <button class="btn-copy-text" onclick="copyRawText()">
+          📋 Copiar texto puro
+        </button>
+
+        <div class="sent-flash" id="sentFlash">✅ Mensagem pronta para enviar!</div>
+
+        <button class="btn-clear" onclick="clearForm()">Limpar formulário</button>
+      </div>
+
+    </div>
+  </div><!-- /form-card -->
+
+  <!-- PREVIEW PANEL -->
+  <div class="preview-panel">
+
+    <!-- Tabs -->
+    <div class="preview-tabs">
+      <button class="ptab active-wa" id="tab-wa" onclick="switchTab('wa')">📱 WhatsApp</button>
+      <button class="ptab" id="tab-ig" onclick="switchTab('ig')">📸 Instagram</button>
+      <button class="ptab" id="tab-text" onclick="switchTab('text')">📋 Texto</button>
+    </div>
+
+    <!-- WhatsApp Preview -->
+    <div class="wa-preview-wrap active" id="preview-wa">
+      <div class="wa-phone">
+        <div class="wa-status-bar">
+          <span>9:41</span>
+          <span>●●●</span>
+        </div>
+        <div class="wa-header">
+          <div class="wa-avatar">🔥</div>
+          <div class="wa-contact">
+            <div class="wa-contact-name">PromoHub — Ofertas</div>
+            <div class="wa-contact-status">online</div>
+          </div>
+        </div>
+        <div class="wa-body">
+          <div class="wa-bubble">
+            <div id="waPreviewText">Preencha o formulário para ver o preview aqui 👈</div>
+            <div class="wa-bubble-time">
+              <span id="waPreviewTime">agora</span>
+              <span>✓✓</span>
+            </div>
+          </div>
+        </div>
+        <div class="wa-input">
+          <div class="wa-input-bar">Mensagem</div>
+          <div class="wa-send">➤</div>
+        </div>
+      </div>
+      <!-- Platform limits -->
+      <div class="platform-limits">
+        <div class="limit-pill">
+          <span>WhatsApp</span>
+          <div class="limit-bar"><div class="limit-fill" id="waLimitFill" style="width:0%"></div></div>
+          <span class="limit-num" id="waLimitNum">0/65536</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instagram Preview -->
+    <div class="ig-preview-wrap" id="preview-ig">
+      <div class="ig-phone">
+        <div class="ig-top-bar">
+          <div class="ig-logo">PromoHub</div>
+          <span style="margin-left:auto;font-size:.8rem">🔔 ⋯</span>
+        </div>
+        <div class="ig-post-header">
+          <div class="ig-avatar">🔥</div>
+          <div>
+            <div class="ig-username">promohub.oficial</div>
+            <div style="font-size:.62rem;color:#888">Patrocinado</div>
+          </div>
+          <span style="margin-left:auto;color:#888;font-size:1rem">⋯</span>
+        </div>
+        <div class="ig-post-img" id="igPostImg">
+          <div class="ig-post-img-emoji" id="igEmoji">🔥</div>
+          <div class="ig-post-img-price" id="igPrice">R$ —</div>
+          <div class="ig-post-img-badge" id="igBadge">OFF</div>
+          <div class="ig-post-img-store" id="igStore">Loja</div>
+        </div>
+        <div class="ig-actions">
+          <span class="ig-action-btn">🤍</span>
+          <span class="ig-action-btn">💬</span>
+          <span class="ig-action-btn">↗️</span>
+          <span style="margin-left:auto" class="ig-action-btn">🔖</span>
+        </div>
+        <div class="ig-caption" id="igCaption">Preencha o formulário para ver o preview 👈</div>
+      </div>
+      <div class="platform-limits">
+        <div class="limit-pill">
+          <span>Instagram</span>
+          <div class="limit-bar"><div class="limit-fill" id="igLimitFill" style="width:0%"></div></div>
+          <span class="limit-num" id="igLimitNum">0/2200</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Raw text -->
+    <div class="text-preview-wrap" id="preview-text">
+      <div class="text-box">
+        <div class="text-box-label">Texto gerado</div>
+        <div id="rawTextPreview">Preencha o formulário para ver o texto aqui 👈</div>
+      </div>
+    </div>
+
+  </div><!-- /preview-panel -->
+
+  <hr class="divider">
+
+  <!-- HISTORY -->
+  <div class="history-section">
+    <div class="history-header">
+      <h3>📋 Histórico de publicações</h3>
+      <button class="btn-clear-history" onclick="clearHistory()">Limpar tudo</button>
+    </div>
+    <div class="history-grid" id="historyGrid">
+      <div class="empty-history">
+        <div class="icon">📭</div>
+        <div>Nenhuma publicação ainda.<br>Crie sua primeira promoção acima!</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ===== STATE =====
+let selectedEmoji = '🔥';
+let selectedStore = '';
+let selectedStoreCls = '';
+let activeTags = ['#promoção','#oferta','#desconto'];
+let history = JSON.parse(localStorage.getItem('ph_history') || '[]');
+let stats = JSON.parse(localStorage.getItem('ph_stats') || '{"published":0,"wa":0,"ig":0}');
+
+// ===== INIT =====
+function init() {
+  renderHistory();
+  updateStats();
+  updatePreview();
+  setTime();
+  setInterval(setTime, 60000);
+}
+
+function setTime() {
+  const now = new Date();
+  document.getElementById('waPreviewTime').textContent =
+    now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+}
+
+// ===== EMOJI =====
+document.querySelectorAll('.emoji-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedEmoji = btn.dataset.emoji;
+    updatePreview();
+  });
+});
+
+// ===== STORE =====
+document.querySelectorAll('.store-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.store-btn').forEach(b => {
+      b.className = 'store-btn';
+    });
+    btn.classList.add(btn.dataset.class);
+    selectedStore = btn.dataset.store;
+    selectedStoreCls = btn.dataset.class;
+    updatePreview();
+  });
+});
+
+// ===== TAGS =====
+document.querySelectorAll('.tag-toggle').forEach(tag => {
+  tag.addEventListener('click', () => {
+    tag.classList.toggle('active');
+    activeTags = Array.from(document.querySelectorAll('.tag-toggle.active')).map(t => t.dataset.tag);
+    updatePreview();
+  });
+});
+
+// ===== DISCOUNT CALC =====
+function calcDiscount() {
+  const old = parseFloat(document.getElementById('priceOld').value);
+  const nw = parseFloat(document.getElementById('priceNew').value);
+  const badge = document.getElementById('discountBadge');
+  if (old > 0 && nw > 0 && old > nw) {
+    const pct = Math.round((1 - nw/old) * 100);
+    badge.innerHTML = `-${pct}% <span>desconto</span>`;
+    badge.style.color = 'var(--green)';
+  } else {
+    badge.innerHTML = `— <span>desconto</span>`;
+    badge.style.color = '';
+  }
+  updatePreview();
+}
+
+// ===== CHAR COUNTS =====
+function updateCharCount(inputId, countId, max) {
+  const el = document.getElementById(inputId);
+  const cc = document.getElementById(countId);
+  if (!el || !cc) return;
+  const len = el.value.length;
+  cc.textContent = `${len}/${max}`;
+  cc.className = 'char-count' + (len > max * 0.9 ? ' warn' : '') + (len >= max ? ' over' : '');
+}
+
+// ===== BUILD MESSAGES =====
+function buildWAMessage() {
+  const name = document.getElementById('prodName').value.trim();
+  const old = parseFloat(document.getElementById('priceOld').value);
+  const nw = parseFloat(document.getElementById('priceNew').value);
+  const desc = document.getElementById('prodDesc').value.trim();
+  const link = document.getElementById('prodLink').value.trim();
+  const tone = document.getElementById('msgTone').value;
+  const cat = document.getElementById('prodCat').value;
+
+  const pct = (old > 0 && nw > 0 && old > nw) ? Math.round((1 - nw/old) * 100) : 0;
+  const store = selectedStore || 'Loja parceira';
+  const emoji = selectedEmoji;
+
+  const intros = {
+    urgente: `🚨 *CORRE QUE TÁ ACABANDO!* 🚨\n\n`,
+    casual: `${emoji} *Olha só que oferta incrível!*\n\n`,
+    formal: `${emoji} *Produto em destaque hoje:*\n\n`,
+    divertido: `🎉 *IMPOSSÍVEL IGNORAR ISSO!* 🎉\n\n`
+  };
+
+  let msg = intros[tone] || `${emoji} *Promoção imperdível!*\n\n`;
+
+  if (name) msg += `📌 *${name}*\n`;
+  if (cat) msg += `🏷️ Categoria: ${cat}\n`;
+  if (desc) msg += `\n${desc}\n`;
+
+  msg += `\n`;
+  if (old > 0) msg += `~~De R$ ${old.toFixed(2).replace('.',',')}~~\n`;
+  if (nw > 0) msg += `✅ *Por apenas R$ ${nw.toFixed(2).replace('.',',')}*\n`;
+  if (pct > 0) msg += `🔥 *${pct}% OFF*\n`;
+
+  msg += `\n🛒 Disponível em: *${store}*\n`;
+
+  if (link) msg += `\n🔗 Acesse aqui: ${link}\n`;
+
+  const outros = { urgente: `\n⏰ *Oferta por tempo limitado!*\n`, casual: `\n💬 Manda pra quem precisa!`, formal: ``, divertido: `\n😱 Não diz que não avisamos!` };
+  msg += outros[tone] || '';
+
+  msg += `\n\n_Preços e disponibilidade sujeitos a alteração. Links de afiliados._`;
+
+  return msg;
+}
+
+function buildIGCaption() {
+  const name = document.getElementById('prodName').value.trim();
+  const old = parseFloat(document.getElementById('priceOld').value);
+  const nw = parseFloat(document.getElementById('priceNew').value);
+  const desc = document.getElementById('prodDesc').value.trim();
+  const link = document.getElementById('prodLink').value.trim();
+  const tone = document.getElementById('msgTone').value;
+  const pct = (old > 0 && nw > 0 && old > nw) ? Math.round((1 - nw/old) * 100) : 0;
+  const store = selectedStore || 'Loja parceira';
+  const emoji = selectedEmoji;
+
+  const headers = {
+    urgente: `🚨 CORRE! Oferta relâmpago! 🚨`,
+    casual: `${emoji} Olha que oferta incrível!`,
+    formal: `${emoji} Produto em oferta hoje`,
+    divertido: `🎉 IMPOSSÍVEL NÃO QUERER ISSO!`
+  };
+
+  let caption = (headers[tone] || `${emoji} Promoção imperdível!`) + `\n\n`;
+
+  if (name) caption += `📌 ${name}\n`;
+  if (desc) caption += `\n${desc}\n`;
+  caption += `\n`;
+  if (old > 0) caption += `De: R$ ${old.toFixed(2).replace('.',',')}\n`;
+  if (nw > 0) caption += `💚 Por: R$ ${nw.toFixed(2).replace('.',',')}\n`;
+  if (pct > 0) caption += `🔥 ${pct}% de desconto!\n`;
+  caption += `\n🛒 Em: ${store}\n`;
+  if (link) caption += `\n🔗 Link na bio ou: ${link}\n`;
+
+  const footers = {
+    urgente: `\n⏰ Por tempo limitado!`,
+    casual: `\n💬 Salva e compartilha!`,
+    formal: ``,
+    divertido: `\n😱 Chama o amigo pra comprar junto!`
+  };
+  caption += footers[tone] || '';
+
+  if (activeTags.length > 0) {
+    caption += `\n\n${activeTags.join(' ')}`;
+    const store_tags = { 'Amazon':'#amazon','Shopee':'#shopee','Mercado Livre':'#mercadolivre','Magalu':'#magalu','Temu':'#temu','AliExpress':'#aliexpress' };
+    if (store_tags[store]) caption += ` ${store_tags[store]}`;
+  }
+
+  return caption;
+}
+
+// ===== UPDATE PREVIEW =====
+function updatePreview() {
+  updateCharCount('prodName','ccName',120);
+  updateCharCount('prodDesc','ccDesc',300);
+
+  const waMsg = buildWAMessage();
+  const igCaption = buildIGCaption();
+  const nw = parseFloat(document.getElementById('priceNew').value);
+  const old = parseFloat(document.getElementById('priceOld').value);
+  const pct = (old > 0 && nw > 0 && old > nw) ? Math.round((1 - nw/old) * 100) : 0;
+
+  // WA
+  document.getElementById('waPreviewText').textContent = waMsg;
+  const waLen = waMsg.length;
+  const waFill = Math.min(100, waLen/65536*100);
+  document.getElementById('waLimitFill').style.width = waFill + '%';
+  document.getElementById('waLimitNum').textContent = `${waLen}/65536`;
+
+  // IG post image
+  document.getElementById('igEmoji').textContent = selectedEmoji;
+  document.getElementById('igPrice').textContent = nw > 0 ? `R$ ${nw.toFixed(2).replace('.',',')}` : 'R$ —';
+  document.getElementById('igBadge').textContent = pct > 0 ? `-${pct}%` : 'OFF';
+  document.getElementById('igStore').textContent = selectedStore || 'Loja';
+  document.getElementById('igCaption').textContent = igCaption || 'Preencha o formulário 👈';
+
+  // IG limit
+  const igLen = igCaption.length;
+  const igFill = Math.min(100, igLen/2200*100);
+  document.getElementById('igLimitFill').style.width = igFill + '%';
+  document.getElementById('igLimitFill').className = 'limit-fill' + (igFill>80?' warn':'') + (igFill>=100?' over':'');
+  document.getElementById('igLimitNum').textContent = `${igLen}/2200`;
+
+  // Raw text
+  document.getElementById('rawTextPreview').textContent = waMsg;
+}
+
+// ===== TABS =====
+function switchTab(tab) {
+  ['wa','ig','text'].forEach(t => {
+    document.getElementById('preview-'+t).classList.remove('active');
+    document.getElementById('tab-'+t).classList.remove('active-wa','active-ig','active-text');
+  });
+  document.getElementById('preview-'+tab).classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active-'+tab);
+}
+
+// ===== WHATSAPP =====
+function sendWhatsApp() {
+  const name = document.getElementById('prodName').value.trim();
+  if (!name) { showToast('⚠️','Preencha o nome do produto!',''); return; }
+
+  const msg = buildWAMessage();
+  const number = document.getElementById('waNumber').value.replace(/\D/g,'');
+  const encoded = encodeURIComponent(msg);
+  const url = number ? `https://wa.me/55${number}?text=${encoded}` : `https://wa.me/?text=${encoded}`;
+
+  window.open(url, '_blank');
+
+  saveToHistory('wa', msg);
+  stats.wa++; stats.published++;
+  saveStats();
+  showToast('📱','WhatsApp aberto com a mensagem pronta!','wa-toast');
+  document.getElementById('sentFlash').classList.add('show');
+  setTimeout(() => document.getElementById('sentFlash').classList.remove('show'), 3000);
+}
+
+// ===== INSTAGRAM =====
+function copyInstagram() {
+  const name = document.getElementById('prodName').value.trim();
+  if (!name) { showToast('⚠️','Preencha o nome do produto!',''); return; }
+
+  const caption = buildIGCaption();
+  navigator.clipboard.writeText(caption).then(() => {
+    saveToHistory('ig', caption);
+    stats.ig++; stats.published++;
+    saveStats();
+    showToast('📸','Legenda copiada! Cole no Instagram agora.','ig-toast');
+    document.getElementById('sentFlash').classList.add('show');
+    setTimeout(() => document.getElementById('sentFlash').classList.remove('show'), 3000);
+  }).catch(() => {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = caption; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('📸','Legenda copiada!','ig-toast');
+  });
+}
+
+// ===== COPY RAW =====
+function copyRawText() {
+  const msg = buildWAMessage();
+  navigator.clipboard.writeText(msg).then(() => {
+    showToast('📋','Texto copiado!','success');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = msg; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('📋','Texto copiado!','success');
+  });
+}
+
+// ===== CLEAR =====
+function clearForm() {
+  ['prodName','priceOld','priceNew','prodDesc','prodLink','waNumber'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('prodCat').selectedIndex = 0;
+  document.getElementById('msgTone').selectedIndex = 0;
+  document.querySelectorAll('.store-btn').forEach(b => b.className = 'store-btn');
+  selectedStore = ''; selectedStoreCls = '';
+  document.querySelectorAll('.emoji-btn').forEach((b,i) => { b.classList.toggle('active', i===0); });
+  selectedEmoji = '🔥';
+  document.getElementById('discountBadge').innerHTML = '— <span>desconto</span>';
+  updatePreview();
+}
+
+// ===== HISTORY =====
+function saveToHistory(type, text) {
+  const name = document.getElementById('prodName').value.trim();
+  const nw = parseFloat(document.getElementById('priceNew').value);
+  const old = parseFloat(document.getElementById('priceOld').value);
+  const pct = (old > 0 && nw > 0 && old > nw) ? Math.round((1 - nw/old) * 100) : 0;
+
+  const entry = {
+    id: Date.now(),
+    name: name || 'Produto sem nome',
+    store: selectedStore,
+    storeCls: selectedStoreCls,
+    priceNew: nw,
+    priceOld: old,
+    discount: pct,
+    type,
+    text,
+    date: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})
+  };
+
+  history.unshift(entry);
+  if (history.length > 20) history = history.slice(0,20);
+  localStorage.setItem('ph_history', JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory() {
+  const grid = document.getElementById('historyGrid');
+  if (!history.length) {
+    grid.innerHTML = `<div class="empty-history"><div class="icon">📭</div><div>Nenhuma publicação ainda.<br>Crie sua primeira promoção acima!</div></div>`;
+    return;
+  }
+  grid.innerHTML = history.map(h => `
+    <div class="history-card">
+      <div class="history-card-top">
+        <div class="history-card-title">${h.name}</div>
+        <div class="history-card-store ${h.storeCls}">${h.store || '—'}</div>
+      </div>
+      <div class="history-card-prices">
+        ${h.priceNew ? `<div class="h-price">R$ ${h.priceNew.toFixed(2).replace('.',',')}</div>` : ''}
+        ${h.priceOld ? `<div class="h-old">R$ ${h.priceOld.toFixed(2).replace('.',',')}</div>` : ''}
+        ${h.discount ? `<div class="h-off">-${h.discount}%</div>` : ''}
+      </div>
+      <div class="history-card-actions">
+        <button class="h-btn h-btn-wa" onclick="resendWA(${h.id})">📱 WA</button>
+        <button class="h-btn h-btn-ig" onclick="resendIG(${h.id})">📸 IG</button>
+        <button class="h-btn h-btn-del" onclick="deleteHistory(${h.id})">🗑️</button>
+      </div>
+      <div class="h-date">${h.type === 'wa' ? '📱' : '📸'} ${h.date}</div>
+    </div>
+  `).join('');
+}
+
+function resendWA(id) {
+  const entry = history.find(h => h.id === id);
+  if (!entry) return;
+  const number = document.getElementById('waNumber').value.replace(/\D/g,'');
+  const url = number
+    ? `https://wa.me/55${number}?text=${encodeURIComponent(entry.text)}`
+    : `https://wa.me/?text=${encodeURIComponent(entry.text)}`;
+  window.open(url,'_blank');
+  stats.wa++; saveStats();
+  showToast('📱','WhatsApp aberto!','wa-toast');
+}
+
+function resendIG(id) {
+  const entry = history.find(h => h.id === id);
+  if (!entry) return;
+  navigator.clipboard.writeText(entry.text).then(() => {
+    stats.ig++; saveStats();
+    showToast('📸','Texto copiado para Instagram!','ig-toast');
+  });
+}
+
+function deleteHistory(id) {
+  history = history.filter(h => h.id !== id);
+  localStorage.setItem('ph_history', JSON.stringify(history));
+  renderHistory();
+}
+
+function clearHistory() {
+  if (confirm('Limpar todo o histórico?')) {
+    history = [];
+    localStorage.setItem('ph_history', JSON.stringify(history));
+    renderHistory();
+  }
+}
+
+// ===== STATS =====
+function saveStats() {
+  localStorage.setItem('ph_stats', JSON.stringify(stats));
+  updateStats();
+}
+function updateStats() {
+  document.getElementById('totalPublished').textContent = stats.published;
+  document.getElementById('totalWA').textContent = stats.wa;
+  document.getElementById('totalIG').textContent = stats.ig;
+}
+
+// ===== TOAST =====
+let toastTimer;
+function showToast(icon, msg, type) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = 'toast show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ===== START =====
+init();
+</script>
+</div><!-- /central -->
+
+<!-- TOAST (shared) -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon">✅</span>
+  <span id="toastMsg">Copiado!</span>
+</div>
+
+</body>
+</html>
